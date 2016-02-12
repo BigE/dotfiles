@@ -44,7 +44,7 @@ function __eg_loads_display()
     cpus="$cpus.00"
     if [[ ${load:0:-1} > "$cpus" ]]
     then
-        echo -ne $(__eg_bg_color 1)${GREEN}${BOLD}\x2622
+        echo -ne $(__eg_bg_color 1)${GREEN}${BOLD}
     fi
     echo -n $(__eg_loads)
     echo -ne ${RESET}
@@ -235,10 +235,11 @@ fi
 
 
 PROMPT_COMMAND="__eg_prompt_command"
+PROMPT=$'\u23e9'
 export PS1="\[${GREEN}\]\[${BOLD}\]${USER}\[${BLUE}\]@\[${GREEN}\]${HOSTNAME}\[${RESET}\] \
 \[${BLUE}\]\[${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 102)\]\${newPWD}\[${RESET}\]\[${BLUE}\]\[${BOLD}\]]\
 \[$(__eg_fg_color 1)\]\$(__eg_git_svn_ps1)\
 \[${TEAL}\]\$(__eg_virtualenv)\
 \[${RESET}\]\$fill\
 \[${BLUE}\]\[${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 202)\]\$(__eg_loads_display)\[${BLUE}\]\[${BOLD}\]]\
-\[${RESET}\]\n$(__eg_fg_color 248)\$${RESET} "
+\[${RESET}\]\n$PROMPT "
