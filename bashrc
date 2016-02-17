@@ -17,6 +17,10 @@ function __eg_bg_color()
     echo $(tput setab $1)
 }
 
+function __eg_command_exists () {
+    command -v "$1" &> /dev/null ;
+}
+
 function __eg_fg_color()
 {
     echo $(tput setaf $1)
@@ -42,7 +46,7 @@ function __eg_loads_display()
     load=$(__eg_load)
     cpus=$(grep processor /proc/cpuinfo | wc -l)
     cpus="$cpus.00"
-    if [[ ${load:0:-1} > "$cpus" ]]
+    if (( $(echo "${load%?}" '>' "$cpus" | bc -l ) ))
     then
         echo -ne $(__eg_bg_color 1)${GREEN}${BOLD}
     fi
@@ -159,8 +163,14 @@ then
 fi
 
 #exports
-export EDITOR="vim"
-export DIETY=$EDITOR # haha
+if __eg_command_exists vim
+then
+    export EDITOR="vim"
+    export DIETY=$EDITOR # haha
+elif __eg_command_exists nano
+then
+    export EDITOR="nano" # not diety
+fi
 
 # import my local bin directory
 if [[ -d $HOME/.local/bin ]]
@@ -235,7 +245,7 @@ fi
 
 
 PROMPT_COMMAND="__eg_prompt_command"
-PROMPT=$'\u23e9'
+PROMPT=$'\xe2\x8f\xa9'
 export PS1="\[${GREEN}\]\[${BOLD}\]${USER}\[${BLUE}\]@\[${GREEN}\]${HOSTNAME}\[${RESET}\] \
 \[${BLUE}\]\[${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 102)\]\${newPWD}\[${RESET}\]\[${BLUE}\]\[${BOLD}\]]\
 \[$(__eg_fg_color 1)\]\$(__eg_git_svn_ps1)\
