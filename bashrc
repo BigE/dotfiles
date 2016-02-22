@@ -106,7 +106,7 @@ __eg_git_svn_ps1() {
         local r=`__eg_svn_rev`
         local b=`__eg_svn_branch`
         s=" [svn:$b:$r]"
-    elif [[ -d .git ]] ; then
+    elif [[ -d .git ]] && __eg_function_exists __git_ps1; then
         s=`__git_ps1 " (git:%s)"`
     fi
     echo -n "$s"
@@ -152,6 +152,12 @@ function __eg_psgrep()
 
 }
 
+function __eg_function_exists()
+{
+    declare -f -F $1 > /dev/null
+    return $?;
+}
+
 ###############################################################################
 # environment setup
 ###############################################################################
@@ -193,7 +199,7 @@ else
 fi
 
 # show more git info
-#export GIT_PS1_SHOWDIRTYSTATE=true
+export GIT_PS1_SHOWDIRTYSTATE=true
 #export GIT_PS1_SHOWUNTRACKEDFILES=true
 # if you want to see svn modifications:
 export SVN_SHOWDIRTYSTATE=1
