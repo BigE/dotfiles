@@ -225,7 +225,9 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 if [ -z "$WORKON_HOME" ]; then
     export WORKON_HOME=~/.virtualenvs
 fi
-if [[ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]]; then
+if [[ -f ~/.local/bin/virtualenvwrapper.sh ]]; then
+    source ~/.local/bin/virtualenvwrapper.sh
+elif [[ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]]; then
     source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 elif [[ -f /bin/virtualenvwrapper.sh ]]; then
     source /bin/virtualenvwrapper.sh
