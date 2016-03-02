@@ -145,9 +145,9 @@ function __eg_psgrep()
 {
     if [ "$#" -eq 1 ]
     then
-        ps aux | grep -v grep | grep ${@:1}
+        ps aux | grep -v grep | grep --color ${@:1}
     else
-        ps $1 | grep -v grep | grep ${@:2}
+        ps $1 | grep -v grep | grep --color ${@:2}
     fi
 
 }
@@ -236,6 +236,7 @@ fi
 ###############################################################################
 # alias setup
 ###############################################################################
+alias grep="grep --color"
 alias ls="ls -h --color=auto"
 alias ll="ls -l"
 alias la="ls -a"
