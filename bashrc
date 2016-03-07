@@ -146,10 +146,9 @@ __eg_svn_rev() {
     if [ ! -z $SVN_SHOWDIRTYSTATE ]; then
         local svnst flag
         svnst=$(svn status | grep '^\s*[?ACDMR?!]')
-        [ -z "$svnst" ] && flag=*
-        r=$r$flag
+        [ -z "$svnst" ] || r="$r *"
     fi
-    echo $r
+    echo "$r"
 }
 
 # psgrep ;)
