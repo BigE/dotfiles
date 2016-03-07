@@ -54,6 +54,18 @@ function __eg_loads_display()
     echo -ne ${RESET}
 }
 
+function __eg_test_unicode()
+{
+    echo -ne "\xe2\x88\xb4\033[6n\033[1K\r"
+    read -d R foo
+    echo -ne "\033[1K\r"
+    echo -e "${foo}" | cut -d \[ -f 2 | cut -d";" -f 2 | (
+        read UNICODE
+        [ $UNICODE -eq 2 ] && return 0
+        [ $UNICODE -ne 2 ] && return 1
+    )
+}
+
 function __eg_virtualenv()
 {
     if [[ -n "$VIRTUAL_ENV" ]]; then
@@ -219,12 +231,17 @@ WHITE="$(tput setaf 7)"
 
 
 ###############################################################################
-# virtual environment setup
+# virtualenv setup
 ###############################################################################
+
+# I make my own
 export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+# if not already set, virtualenvs should reside here
 if [ -z "$WORKON_HOME" ]; then
     export WORKON_HOME=~/.virtualenvs
 fi
+
 if [[ -f ~/.local/bin/virtualenvwrapper.sh ]]; then
     source ~/.local/bin/virtualenvwrapper.sh
 elif [[ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]]; then
@@ -236,6 +253,7 @@ fi
 ###############################################################################
 # alias setup
 ###############################################################################
+
 alias grep="grep --color"
 alias ls="ls -h --color=auto"
 alias ll="ls -l"
@@ -243,18 +261,26 @@ alias la="ls -a"
 alias rm="rm -i" # use -i by default to make sure we want to delete it
 alias psgrep=__eg_psgrep
 
-if [[ -f $HOME/.bashrc_local ]]
-then
-    source $HOME/.bashrc_local
-fi
-
 ###############################################################################
 # prompt setup
 ###############################################################################
 
+__eg_test_unicode
+if [ $? -eq 0 ];
+then
+    UNICODE_SUPPORT=1
+else
+    UNICODE_SUPPORT=0
+fi
 
 PROMPT_COMMAND="__eg_prompt_command"
-PROMPT=$'\xe2\x8f\xa9'
+if [ $UNICODE_SUPPORT -eq 1 ];
+then
+    PROMPT=$'\xe2\x8f\xa9'
+else
+    PROMPT='$'
+fi
+
 export PS1="\[${GREEN}\]\[${BOLD}\]${USER}\[${BLUE}\]@\[${GREEN}\]${HOSTNAME}\[${RESET}\] \
 \[${BLUE}\]\[${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 102)\]\${newPWD}\[${RESET}\]\[${BLUE}\]\[${BOLD}\]]\
 \[$(__eg_fg_color 1)\]\$(__eg_git_svn_ps1)\
@@ -262,3 +288,12 @@ export PS1="\[${GREEN}\]\[${BOLD}\]${USER}\[${BLUE}\]@\[${GREEN}\]${HOSTNAME}\[$
 \[${RESET}\]\$fill\
 \[${BLUE}\]\[${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 202)\]\$(__eg_loads_display)\[${BLUE}\]\[${BOLD}\]]\
 \[${RESET}\]\n$PROMPT "
+
+###############################################################################
+# import local settings
+###############################################################################
+
+if [[ -f $HOME/.bashrc_local ]]
+then
+    source $HOME/.bashrc_local
+fi
