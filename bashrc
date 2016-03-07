@@ -46,7 +46,7 @@ function __eg_loads_display()
     load=$(__eg_load)
     cpus=$(grep processor /proc/cpuinfo | wc -l)
     cpus="$cpus.00"
-    if (( $(echo "${load%?}" '>' "$cpus" | bc -l ) ))
+    if __eg_command_exists bc && (( $(echo "${load%?}" '>' "$cpus" | bc -l ) ))
     then
         echo -ne $(__eg_bg_color 1)${GREEN}${BOLD}
     fi
@@ -210,9 +210,10 @@ else
     eval `dircolors`
 fi
 
-# show more git info
-export GIT_PS1_SHOWDIRTYSTATE=true
-#export GIT_PS1_SHOWUNTRACKEDFILES=true
+# show more git info - leaving these disabled, should enable in .bashrc_local
+export GIT_PS1_SHOWDIRTYSTATE=
+export GIT_PS1_SHOWUNTRACKEDFILES=
+
 # if you want to see svn modifications:
 export SVN_SHOWDIRTYSTATE=1
 
