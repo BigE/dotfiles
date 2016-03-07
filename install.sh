@@ -7,6 +7,11 @@ then
     exit 1;
 fi
 
+if [ -d $HOME/.byobu/ ]
+then
+    mv $HOME/.byobu/ $HOME/.byobu.bak
+fi
+
 ln -sf $DIR/bashrc $HOME/.bashrc
 ln -sf $DIR/byobu/ $HOME/.byobu
 ln -sf $DIR/gitconfig $HOME/.gitconfig
