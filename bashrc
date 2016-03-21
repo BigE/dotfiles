@@ -192,7 +192,7 @@ fi
 # import my local bin directory
 if [[ -d $HOME/.local/bin ]]
 then
-    export PATH=$HOME/.local/bin:$PATH
+    export PATH=./vendor/bin:$HOME/.local/bin:$PATH
 fi
 
 #Enable colors for ls, etc. Prefer ~/.dir_colors #64489
