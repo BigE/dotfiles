@@ -13,7 +13,7 @@ then
 fi
 
 ln -sf $DIR/bashrc $HOME/.bashrc
-ln -sf $DIR/byobu/ $HOME/.byobu
+ln -sf $DIR/byobu $HOME/.byobu
 ln -sf $DIR/gitconfig $HOME/.gitconfig
 ln -sf $DIR/gvimrc $HOME/.gvimrc
 ln -sf $DIR/vimrc $HOME/.vimrc
