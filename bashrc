@@ -78,6 +78,8 @@ function __eg_virtualenv()
 
 function __eg_prompt_command()
 {
+	local curr_exit="$?"
+
     case $TERM in
         xterm*|rxvt*|Eterm)
             echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/$HOME/~}\007"
@@ -89,7 +91,7 @@ function __eg_prompt_command()
 
 
     #   Add all the accessories below ...
-    local temp="${USER}@${HOSTNAME}$(__eg_virtualenv)$(__eg_git_svn_ps1) [$(__eg_pwd)][$(__eg_loads)]"
+    local temp="${USER}@${HOSTNAME}$(__eg_last_exit $curr_exit)$(__eg_virtualenv)$(__eg_git_svn_ps1) [$(__eg_pwd)][$(__eg_loads)]"
 
     let fillsize=${COLUMNS}-${#temp}
     if [ "$fillsize" -gt "0" ]
@@ -109,15 +111,33 @@ function __eg_prompt_command()
         let cut=3-${fillsize}
         newPWD="...${__eg_pwd:${cut}}"
     fi
+
+    local PROMPT="%"
+    if [ "$curr_exit" != 0 ]; then
+        PROMPT="\[${BOLD}${RED}\]${PROMPT}\[${RESET}\]"
+    fi
+
+	PS1="\[${GREEN}${BOLD}\]${USER}\[${BLUE}\]@\[${GREEN}\]${HOSTNAME}\[${RESET}\]\
+\[${BOLD}${RED}\]$(__eg_last_exit $curr_exit)\[${RESET}\] \
+\[${BLUE}${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 102)\]\${newPWD}\[${RESET}${BLUE}${BOLD}\]]\
+\[$(__eg_fg_color 1)\]\$(__eg_git_svn_ps1)\
+\[${TEAL}\]\$(__eg_virtualenv)\
+\[${RESET}\]\$fill\
+\[${BLUE}${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 202)\]\$(__eg_loads_display)\[${BLUE}${BOLD}\]]\
+\[${RESET}\]\n${PROMPT}\[${RESET}\] "
 }
 
 # git/Subversion prompt function
 __eg_git_svn_ps1() {
     local s=
     if [[ -d ".svn" ]] ; then
-        local r=`__eg_svn_rev`
-        local b=`__eg_svn_branch`
-        s=" [svn:$b:$r]"
+        if __eg_command_exists svn ; then
+            local r=`__eg_svn_rev`
+            local b=`__eg_svn_branch`
+            s=" [svn:$b:$r]"
+        else
+            s=" [svn:---]"
+        fi
     elif [[ -d .git ]] && __eg_function_exists __git_ps1; then
         s=`__git_ps1 " (git:%s)"`
     fi
@@ -169,6 +189,13 @@ function __eg_function_exists()
     return $?;
 }
 
+function __eg_last_exit()
+{
+	if [ "$1" != 0 ]; then
+		echo -ne "($1)"
+	fi
+}
+
 ###############################################################################
 # environment setup
 ###############################################################################
@@ -177,6 +204,19 @@ function __eg_function_exists()
 if [[ -f /etc/profile ]]
 then
     source /etc/profile
+fi
+
+# import bash completion
+if [ -f /etc/bash_completion ]; then
+    source /etc/bash_completion
+fi
+
+if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
+	# because reasons ... there has to be a better way in fedora
+    source /usr/share/git-core/contrib/completion/git-prompt.sh
+elif [ -f /usr/share/git/completion/git-prompt.sh ]; then
+	# this is for arch
+	source /usr/share/git/completion/git-prompt.sh
 fi
 
 #exports
@@ -265,32 +305,11 @@ alias psgrep=__eg_psgrep
 # prompt setup
 ###############################################################################
 
-__eg_test_unicode
-if [ $? -eq 0 ];
-then
-    UNICODE_SUPPORT=1
-else
-    UNICODE_SUPPORT=0
-fi
-
 PROMPT_COMMAND="__eg_prompt_command"
-if [ $UNICODE_SUPPORT -eq 1 ];
-then
-    PROMPT=$'\xe2\x8f\xa9'
-else
-    PROMPT='$'
-fi
-
-export PS1="\[${GREEN}\]\[${BOLD}\]${USER}\[${BLUE}\]@\[${GREEN}\]${HOSTNAME}\[${RESET}\] \
-\[${BLUE}\]\[${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 102)\]\${newPWD}\[${RESET}\]\[${BLUE}\]\[${BOLD}\]]\
-\[$(__eg_fg_color 1)\]\$(__eg_git_svn_ps1)\
-\[${TEAL}\]\$(__eg_virtualenv)\
-\[${RESET}\]\$fill\
-\[${BLUE}\]\[${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 202)\]\$(__eg_loads_display)\[${BLUE}\]\[${BOLD}\]]\
-\[${RESET}\]\n$PROMPT "
+trap '__eg_prompt_command' WINCH
 
 ###############################################################################
-# import local settings
+# import local settings (overrides)
 ###############################################################################
 
 if [[ -f $HOME/.bashrc_local ]]
