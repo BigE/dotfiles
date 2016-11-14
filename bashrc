@@ -8,6 +8,19 @@ if [[ $- != *i* ]] ; then
     return
 fi
 
+#colors
+# 2016-02-11 updated to use tput & setaf/setab to set colors
+RESET="$(tput sgr0)"
+BOLD="$(tput bold)"
+BLACK="$(tput setaf 0)"
+RED="$(tput setaf 1)"
+GREEN="$(tput setaf 2)"
+YELLOW="$(tput setaf 3)"
+BLUE="$(tput setaf 4)"
+PURPLE="$(tput setaf 5)"
+TEAL="$(tput setaf 6)"
+WHITE="$(tput setaf 7)"
+
 ###############################################################################
 # these are all my custom functions
 ###############################################################################
@@ -91,7 +104,7 @@ function __eg_prompt_command()
 
 
     #   Add all the accessories below ...
-    local temp="${USER}@${HOSTNAME}$(__eg_last_exit $curr_exit)$(__eg_virtualenv)$(__eg_git_svn_ps1) [$(__eg_pwd)][$(__eg_loads)]"
+    local temp="${USER}@${HOSTNAME}$(__eg_last_exit $curr_exit)$(__eg_ssh_prompt)$(__eg_virtualenv)$(__eg_git_svn_ps1) [$(__eg_pwd)][$(__eg_loads)]"
 
     let fillsize=${COLUMNS}-${#temp}
     if [ "$fillsize" -gt "0" ]
@@ -118,7 +131,8 @@ function __eg_prompt_command()
     fi
 
 	PS1="\[${GREEN}${BOLD}\]${USER}\[${BLUE}\]@\[${GREEN}\]${HOSTNAME}\[${RESET}\]\
-\[${BOLD}${RED}\]$(__eg_last_exit $curr_exit)\[${RESET}\] \
+\[${BOLD}${RED}\]$(__eg_last_exit $curr_exit)\[${RESET}\]\
+\[${BOLD}${GREEN}$(__eg_ssh_prompt)${RESET} \
 \[${BLUE}${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 102)\]\${newPWD}\[${RESET}${BLUE}${BOLD}\]]\
 \[$(__eg_fg_color 1)\]\$(__eg_git_svn_ps1)\
 \[${TEAL}\]\$(__eg_virtualenv)\
@@ -196,6 +210,13 @@ function __eg_last_exit()
 	fi
 }
 
+function __eg_ssh_prompt()
+{
+    if [ -n "$SSH_CLIENT" ]; then
+        echo -ne "(ssh)"
+    fi
+}
+
 ###############################################################################
 # environment setup
 ###############################################################################
@@ -256,19 +277,6 @@ export GIT_PS1_SHOWUNTRACKEDFILES=
 # if you want to see svn modifications:
 export SVN_SHOWDIRTYSTATE=1
 
-#colors
-# 2016-02-11 updated to use tput & setaf/setab to set colors
-RESET="$(tput sgr0)"
-BOLD="$(tput bold)"
-BLACK="$(tput setaf 0)"
-RED="$(tput setaf 1)"
-GREEN="$(tput setaf 2)"
-YELLOW="$(tput setaf 3)"
-BLUE="$(tput setaf 4)"
-PURPLE="$(tput setaf 5)"
-TEAL="$(tput setaf 6)"
-WHITE="$(tput setaf 7)"
-
 
 ###############################################################################
 # virtualenv setup
@@ -280,6 +288,10 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 # if not already set, virtualenvs should reside here
 if [ -z "$WORKON_HOME" ]; then
     export WORKON_HOME=~/.virtualenvs
+fi
+
+if [ -z "$PROJECT_HOME" ]; then
+    export PROJECT_HOME=~/Projects
 fi
 
 if [[ -f ~/.local/bin/virtualenvwrapper.sh ]]; then
@@ -300,6 +312,8 @@ alias ll="ls -l"
 alias la="ls -a"
 alias rm="rm -i" # use -i by default to make sure we want to delete it
 alias psgrep=__eg_psgrep
+# used for Arch linux to find the best mirror
+alias mirrors='sudo reflector -l 30 -c "United States" -c Canada -f 10 --sort rate --save /etc/pacman.d/mirrorlist'
 
 ###############################################################################
 # prompt setup
