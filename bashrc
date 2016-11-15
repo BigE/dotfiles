@@ -50,7 +50,6 @@ function __eg_prompt_command
             echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/$HOME/~}\033\\"
         ;;
     esac
-    echo $EG_TITLEBAR
 
     local ps1="${USER}@${HOSTNAME} [${EG_PWD}]$(__eg_vcs_ps1_display)$(__eg_virtualenv_ps1_display)$(__eg_datetime_display)[$(__eg_loads)]"
 
