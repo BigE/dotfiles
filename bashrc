@@ -37,8 +37,8 @@ function __eg_loads
 
 function __eg_prompt_command
 {
-    EG_DATETIME=$(date "+${EG_DATETIME_FORMAT}")
     EG_LAST_EXIT_CODE="$?"
+    EG_DATETIME=$(date "+${EG_DATETIME_FORMAT}")
     EG_LAST_EXIT=""
     EG_PWD=$(pwd)
 
