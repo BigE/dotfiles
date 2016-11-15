@@ -1,97 +1,46 @@
-# Eric Gach's bashrc file
-
-# Test for an interactive shell.  There is no need to set anything
-# past this point for scp and rcp, and it's important to refrain from
-# outputting anything in those cases.
-if [[ $- != *i* ]] ; then
-    # Shell is non-interactive.  Be done now!
+# This is a bashrc, if we're not interactive, gtfo!
+if [[ $- != *i* ]]; then
     return
 fi
 
-#colors
-# 2016-02-11 updated to use tput & setaf/setab to set colors
-RESET="$(tput sgr0)"
-BOLD="$(tput bold)"
-BLACK="$(tput setaf 0)"
-RED="$(tput setaf 1)"
-GREEN="$(tput setaf 2)"
-YELLOW="$(tput setaf 3)"
-BLUE="$(tput setaf 4)"
-PURPLE="$(tput setaf 5)"
-TEAL="$(tput setaf 6)"
-WHITE="$(tput setaf 7)"
+################################################################################
+# Helpers that will be used throughout this file and to generate the PS1.
+################################################################################
 
-###############################################################################
-# these are all my custom functions
-###############################################################################
-
-function __eg_bg_color()
+function __eg_command_exists
 {
-    echo $(tput setab $1)
+    command -v "$1" &> /dev/null
 }
 
-function __eg_command_exists () {
-    command -v "$1" &> /dev/null ;
-}
-
-function __eg_fg_color()
+function __eg_datetime_display
 {
-    echo $(tput setaf $1)
-}
-
-function __eg_pwd()
-{
-    echo $(pwd)
-}
-
-function __eg_load()
-{
-    echo $(uptime | awk '{print $(NF - 2)}')
-}
-
-function __eg_loads()
-{
-    echo $(uptime | awk '{print $(NF - 2) $(NF - 1) $NF}')
-}
-
-function __eg_loads_display()
-{
-    load=$(__eg_load)
-    cpus=$(grep processor /proc/cpuinfo | wc -l)
-    cpus="$cpus.00"
-    if __eg_command_exists bc && (( $(echo "${load%?}" '>' "$cpus" | bc -l ) ))
-    then
-        echo -ne $(__eg_bg_color 1)${GREEN}${BOLD}
+    if [ ! -z "$EG_DATETIME" ]; then
+        echo -n "[$EG_DATETIME]"
     fi
-    echo -n $(__eg_loads)
-    echo -ne ${RESET}
 }
 
-function __eg_test_unicode()
+function __eg_fg_color
 {
-    echo -ne "\xe2\x88\xb4\033[6n\033[1K\r"
-    read -d R foo
-    echo -ne "\033[1K\r"
-    echo -e "${foo}" | cut -d \[ -f 2 | cut -d";" -f 2 | (
-        read UNICODE
-        [ $UNICODE -eq 2 ] && return 0
-        [ $UNICODE -ne 2 ] && return 1
-    )
+    echo -ne $(tput setaf $1)
 }
 
-function __eg_virtualenv()
+function __eg_function_exists
 {
-    if [[ -n "$VIRTUAL_ENV" ]]; then
-        venv="${VIRTUAL_ENV##*/}"
-    else
-        venv=''
-    fi
-    [[ -n "$venv" ]] && echo " [env:$venv]"
+    declare -f -F $1 > /dev/null
+    return $?
 }
 
-function __eg_prompt_command()
+function __eg_loads
 {
-	local curr_exit="$?"
+    echo -n $(uptime | awk -F'[a-z]:' '{ printf $2}' | sed 's/,//g')
+}
+
+function __eg_prompt_command
+{
+    EG_DATETIME=$(date "+${EG_DATETIME_FORMAT}")
+    EG_LAST_EXIT_CODE="$?"
+    EG_LAST_EXIT=""
+    EG_PWD=$(pwd)
 
     case $TERM in
         xterm*|rxvt*|Eterm)
@@ -101,91 +50,46 @@ function __eg_prompt_command()
             echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/$HOME/~}\033\\"
         ;;
     esac
+    echo $EG_TITLEBAR
 
+    local ps1="${USER}@${HOSTNAME} [${EG_PWD}]$(__eg_vcs_ps1_display)$(__eg_virtualenv_ps1_display)$(__eg_datetime_display)[$(__eg_loads)]"
 
-    #   Add all the accessories below ...
-    local temp="${USER}@${HOSTNAME}$(__eg_last_exit $curr_exit)$(__eg_ssh_prompt)$(__eg_virtualenv)$(__eg_git_svn_ps1) [$(__eg_pwd)][$(__eg_loads)]"
-
-    let fillsize=${COLUMNS}-${#temp}
-    if [ "$fillsize" -gt "0" ]
-    then
-        fill="                                                                                                                                                                                                                                        "
-        #   Its theoretically possible someone could need more
-        #   dashes than above, but very unlikely!  HOWTO users,
-        #   the above should be ONE LINE, it may not cut and
-        #   paste properly
-        fill="${fill:0:${fillsize}}"
-        newPWD="$(__eg_pwd)"
+    if [ "$EG_LAST_EXIT_CODE" -ne 0 ]; then
+        EG_LAST_EXIT=" ($EG_LAST_EXIT_CODE)"
+        ps1+="${EG_LAST_EXIT}"
     fi
 
-    if [ "$fillsize" -lt "0" ]
-    then
-        fill=""
-        let cut=3-${fillsize}
-        newPWD="...${__eg_pwd:${cut}}"
-    fi
+    let fillsize=$(tput cols)-${#ps1}
 
-    local PROMPT="%"
-    if [ "$curr_exit" != 0 ]; then
-        PROMPT="\[${BOLD}${RED}\]${PROMPT}\[${RESET}\]"
-    fi
-
-	PS1="\[${GREEN}${BOLD}\]${USER}\[${BLUE}\]@\[${GREEN}\]${HOSTNAME}\[${RESET}\]\
-\[${BOLD}${RED}\]$(__eg_last_exit $curr_exit)\[${RESET}\]\
-\[${BOLD}${GREEN}$(__eg_ssh_prompt)${RESET} \
-\[${BLUE}${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 102)\]\${newPWD}\[${RESET}${BLUE}${BOLD}\]]\
-\[$(__eg_fg_color 1)\]\$(__eg_git_svn_ps1)\
-\[${TEAL}\]\$(__eg_virtualenv)\
-\[${RESET}\]\$fill\
-\[${BLUE}${BOLD}\][\[${RESET}\]\[$(__eg_fg_color 202)\]\$(__eg_loads_display)\[${BLUE}${BOLD}\]]\
-\[${RESET}\]\n${PROMPT}\[${RESET}\] "
-}
-
-# git/Subversion prompt function
-__eg_git_svn_ps1() {
-    local s=
-    if [[ -d ".svn" ]] ; then
-        if __eg_command_exists svn ; then
-            local r=`__eg_svn_rev`
-            local b=`__eg_svn_branch`
-            s=" [svn:$b:$r]"
-        else
-            s=" [svn:---]"
+    if [ "$fillsize" -lt 0 ]; then
+        # here's how we choose what to cut
+        if [ ! -z "${EG_DATETIME}" ]; then
+            local datetime_display="$(__eg_datetime_display)"
+            fillsize=${fillsize}+${#datetime_display}
+            EG_DATETIME=""
         fi
-    elif [[ -d .git ]] && __eg_function_exists __git_ps1; then
-        s=`__git_ps1 " (git:%s)"`
-    fi
-    echo -n "$s"
-}
 
-# outputs the current trunk, branch, or tag
-__eg_svn_branch() {
-    local url=
-    if [[ -d .svn ]]; then
-        url=`svn info | awk '/URL:/ {print $2}'`
-        if [[ $url =~ trunk ]]; then
-            echo trunk
-        elif [[ $url =~ /branches/ ]]; then
-            echo $url | sed -e 's#^.*/\(branches/.*\).*$#\1#'
-        elif [[ $url =~ /tags/ ]]; then
-            echo $url | sed -e 's#^.*/\(tags/.*\).*$#\1#'
+        if [ "$fillsize" -lt 0 ]; then
+            let cut=3-${fillsize}
+            EG_PWD="...${EG_PWD:${cut}}"
+            fillsize=0
         fi
     fi
+
+    local fill="                                                                                                                                                                                                                                                                                                                                                                                                                                  "
+    EG_FILL="${fill:0:${fillsize}}"
 }
 
-# outputs the current revision
-__eg_svn_rev() {
-    local r=$(svn info | awk '/Revision:/ {print $2}')
-
-    if [ ! -z $SVN_SHOWDIRTYSTATE ]; then
-        local svnst flag
-        svnst=$(svn status | grep '^\s*[?ACDMR?!]')
-        [ -z "$svnst" ] || r="$r *"
-    fi
-    echo "$r"
+function __eg_prompt_symbol
+{
+    echo -ne '%'
 }
 
-# psgrep ;)
+###
+# Combines `ps` and `grep` to easily search processes. To pass arguments to ps
+# place them before the search term: `__eg_psgrep aux httpd` Simply calling the
+# function and passing a search term will execute `ps aux`
+##
 function __eg_psgrep()
 {
     if [ "$#" -eq 1 ]
@@ -197,33 +101,76 @@ function __eg_psgrep()
 
 }
 
-function __eg_function_exists()
+function __eg_svn_ps1
 {
-    declare -f -F $1 > /dev/null
-    return $?;
-}
+    if [ -d ".svn" ]; then
+        local vcs="---"
 
-function __eg_last_exit()
-{
-	if [ "$1" != 0 ]; then
-		echo -ne "($1)"
-	fi
-}
+        if __eg_command_exists svn; then
+            local r=$(svn info 1>& /dev/null | awk '/Revision:/ {print $2}')
+            # .... I hate svn, only way to keep the prompt clean cause it
+            # still exits with 0 even though it outpus an error!
+            if [ ! -z "$r" ]; then
+                if [ ! -z "$SVN_SHOWDIRTYSTATE" ] && [ "$SVN_SHOWDIRTYSTATE" -ne "0" ]; then
+                    local svnst flag
+                    svnst=$(svn status | grep '^\s*[?ACDMR?!]')
+                    [ -z "$svnst" ] || r="$r *"
+                fi
+                vcs="$r"
+            fi
+        fi
 
-function __eg_ssh_prompt()
-{
-    if [ -n "$SSH_CLIENT" ]; then
-        echo -ne "(ssh)"
+        echo -n "$vcs"
     fi
 }
 
-###############################################################################
-# environment setup
-###############################################################################
+function __eg_vcs_ps1_display
+{
+    if [ -n "$(__eg_vcs_ps1)" ]; then
+        echo -n " ($(__eg_vcs_ps1_type):$(__eg_vcs_ps1))"
+    fi
+}
 
-# import the inital profile
-if [[ -f /etc/profile ]]
-then
+function __eg_vcs_ps1_type
+{
+    if [ -d ".svn" ]; then
+        echo -n 'svn'
+    elif __eg_function_exists __git_ps1 && [ -n "$(__git_ps1)" ]; then
+        echo -n 'git'
+    fi
+}
+
+function __eg_vcs_ps1
+{
+    local vcs=
+
+    if [ -d ".svn" ]; then
+        vcs="$(__eg_svn_ps1)"
+    elif __eg_function_exists __git_ps1; then
+        vcs=`__git_ps1 "%s"`
+    fi
+
+    echo -n "$vcs"
+}
+
+function __eg_virtualenv_ps1_display
+{
+    if [ ! -z "$(__eg_virtualenv_ps1)" ]; then
+        echo -n " [env:$(__eg_virtualenv_ps1)]"
+    fi
+}
+
+function __eg_virtualenv_ps1
+{
+    if [ -n "$VIRTUAL_ENV" ]; then
+        echo -n "${VIRTUAL_ENV##*/}"
+    fi
+}
+
+################################################################################
+# This will import everything we need and setup the base environment and config
+################################################################################
+if [ -f /etc/profile ]; then
     source /etc/profile
 fi
 
@@ -232,15 +179,43 @@ if [ -f /etc/bash_completion ]; then
     source /etc/bash_completion
 fi
 
+# Source the git-prompt.sh file for vcs completion
 if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ]; then
 	# because reasons ... there has to be a better way in fedora
     source /usr/share/git-core/contrib/completion/git-prompt.sh
 elif [ -f /usr/share/git/completion/git-prompt.sh ]; then
-	# this is for arch
+	# this is the location for arch
 	source /usr/share/git/completion/git-prompt.sh
+elif [ -f /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh ]; then
+    # because OSX
+    source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 fi
 
-#exports
+# Setup the virtualenv wrapper if it exists
+if [[ -f ~/.local/bin/virtualenvwrapper.sh ]]; then
+    source ~/.local/bin/virtualenvwrapper.sh
+elif [[ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]]; then
+    source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
+elif [[ -f /bin/virtualenvwrapper.sh ]]; then
+    source /bin/virtualenvwrapper.sh
+fi
+
+# exports for environment
+
+# Disable the virtual environment prompt, I prefer my own
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+# if not already set, virtualenvs should reside here
+if [ -z "$WORKON_HOME" ]; then
+    export WORKON_HOME=~/.virtualenvs
+fi
+
+# This is where I like to keep my projects
+if [ -z "$PROJECT_HOME" ]; then
+    export PROJECT_HOME=~/Projects
+fi
+
+# My editor
 if __eg_command_exists vim
 then
     export EDITOR="vim"
@@ -250,19 +225,20 @@ then
     export EDITOR="nano" # not diety
 fi
 
-# import my local bin directory
+# add local bin directory to $PATH if it exists
 if [[ -d $HOME/.local/bin ]]
 then
-    export PATH=./vendor/bin:$HOME/.local/bin:$PATH
+    export PATH=$HOME/.local/bin:$PATH
 fi
 
+# support for composer projects - see http://getcomposer.org
+export PATH=./vendor/bin:$PATH
+
 #Enable colors for ls, etc. Prefer ~/.dir_colors #64489
-if [[ -f ~/.dir_colors ]]
-then
+if [[ -f ~/.dir_colors ]]; then
     # local directory colors
     eval `dircolors -b ~/.dir_colors`
-elif [[ -f /etc/DIR_COLORS ]]
-then
+elif [[ -f /etc/DIR_COLORS ]]; then
     # This is for Gentoo/RedHat systems
     eval `dircolors -b /etc/DIR_COLORS`
 else
@@ -270,63 +246,74 @@ else
     eval `dircolors`
 fi
 
-# show more git info - leaving these disabled, should enable in .bashrc_local
+# show more git info - leaving these disabled, enable them in .bashrc_local
 export GIT_PS1_SHOWDIRTYSTATE=
 export GIT_PS1_SHOWUNTRACKEDFILES=
 
-# if you want to see svn modifications:
-export SVN_SHOWDIRTYSTATE=1
+# if you want to see svn modifications set this to 1
+export SVN_SHOWDIRTYSTATE=
 
+# Disabled by default, enable this to show the date in the prompt
+#export EG_DATETIME_FORMAT="%Y-%m-%d %H:%M:%S"
 
-###############################################################################
-# virtualenv setup
-###############################################################################
-
-# I make my own
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-
-# if not already set, virtualenvs should reside here
-if [ -z "$WORKON_HOME" ]; then
-    export WORKON_HOME=~/.virtualenvs
-fi
-
-if [ -z "$PROJECT_HOME" ]; then
-    export PROJECT_HOME=~/Projects
-fi
-
-if [[ -f ~/.local/bin/virtualenvwrapper.sh ]]; then
-    source ~/.local/bin/virtualenvwrapper.sh
-elif [[ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]]; then
-    source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-elif [[ -f /bin/virtualenvwrapper.sh ]]; then
-    source /bin/virtualenvwrapper.sh
-fi
-
-###############################################################################
-# alias setup
-###############################################################################
+################################################################################
+# alias setup - these linux specific, feel free to override in .bashrc_local
+################################################################################
 
 alias grep="grep --color"
 alias ls="ls -h --color=auto"
 alias ll="ls -l"
 alias la="ls -a"
 alias rm="rm -i" # use -i by default to make sure we want to delete it
+# make easier use of the awesomeness
 alias psgrep=__eg_psgrep
-# used for Arch linux to find the best mirror
-alias mirrors='sudo reflector -l 30 -c "United States" -c Canada -f 10 --sort rate --save /etc/pacman.d/mirrorlist'
 
-###############################################################################
-# prompt setup
-###############################################################################
+################################################################################
+# I almost felt like these were clutter... almost.
+################################################################################
+RESET=$(tput sgr0)
+BOLD=$(tput bold)
+BLACK=$(__eg_fg_color 0)
+RED=$(__eg_fg_color 1)
+GREEN=$(__eg_fg_color 2)
+YELLOW=$(__eg_fg_color 3)
+BLUE=$(__eg_fg_color 4)
+PURPLE=$(__eg_fg_color 5)
+TEAL=$(__eg_fg_color 6)
+WHITE=$(__eg_fg_color 7)
 
-PROMPT_COMMAND="__eg_prompt_command"
-trap '__eg_prompt_command' WINCH
+################################################################################
+# Import local settings to override things before we generate the PS1
+################################################################################
 
-###############################################################################
-# import local settings (overrides)
-###############################################################################
-
-if [[ -f $HOME/.bashrc_local ]]
-then
+if [ -f $HOME/.bashrc_local ]; then
     source $HOME/.bashrc_local
 fi
+
+################################################################################
+# PS1 - override this in ~/.bashrc_ps1, I will import it before exporting PS1
+################################################################################
+
+PS1="${EG_TITLEBAR}\[$BOLD$GREEN\]${USER}\[$BLUE\]@\[$GREEN\]${HOSTNAME}\[$RESET\]"
+PS1+="\[$BOLD$RED\]\$EG_LAST_EXIT\[$RESET\]"
+PS1+=" \[$BOLD$BLUE\][\[$(__eg_fg_color 102)\]\$EG_PWD\[$BLUE\]]\[$RESET\]"
+PS1+='$([[ -z "$(__eg_vcs_ps1)" ]] || echo -n \[$BOLD$BLUE\] \(\[$TEAL\]$(__eg_vcs_ps1_type):\[$RED\]$(__eg_vcs_ps1)\[$BLUE\]\)\[$RESET\])'
+PS1+='$([[ -z "$(__eg_virtualenv_ps1)" ]] || echo -n \[$BOLD$BLUE\] [\[$TEAL\]env:\[$PURPLE\]$(__eg_virtualenv_ps1)\[$BLUE\]]\[$RESET\])'
+PS1+="\$EG_FILL"
+PS1+='$([[ -z $EG_DATETIME ]] || echo -n \[$BOLD$BLUE\][\[$TEAL\]$EG_DATETIME\[$BLUE\]]\[$RESET\])'
+PS1+="\[$BOLD$BLUE\][\[$(__eg_fg_color 202)\]\$(__eg_loads)\[$BLUE\]]\[$RESET\]"
+PS1+="\n"
+PS1+='$([[ $EG_LAST_EXIT_CODE -eq 0 ]] || echo -n \[$RED\])' # simply turns the prompt red when last exit was not 0
+PS1+="\$(__eg_prompt_symbol)\[$(tput sgr0)\] "
+
+################################################################################
+# PROMPT_COMMAND - override this in ~/.bashrc_ps1 also
+################################################################################
+export PROMPT_COMMAND=__eg_prompt_command
+
+# If it exists, import it, allowing changes to the prompt
+if [ -f "$HOME/.bashrc_ps1" ]; then
+    source "$HOME/.bashrc_ps1"
+fi
+
+export PS1
