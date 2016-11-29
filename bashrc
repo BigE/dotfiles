@@ -102,24 +102,46 @@ function __eg_psgrep()
 
 function __eg_svn_ps1
 {
-    if [ -d ".svn" ]; then
-        local vcs="---"
+    if __eg_command_exists svn; then
+        WD=$( while ! test -d ".svn" && [ `pwd` != "/" ]; do cd ..; done; pwd )
+        # This assumes we don't have a svn repo at the root folder
+        if [ "$WD" != "/" ]; then
+            local info=$(svn info 2>/dev/null)
 
-        if __eg_command_exists svn; then
-            local r=$(svn info 1>& /dev/null | awk '/Revision:/ {print $2}')
-            # .... I hate svn, only way to keep the prompt clean cause it
-            # still exits with 0 even though it outpus an error!
-            if [ ! -z "$r" ]; then
-                if [ ! -z "$SVN_SHOWDIRTYSTATE" ] && [ "$SVN_SHOWDIRTYSTATE" -ne "0" ]; then
-                    local svnst flag
-                    svnst=$(svn status | grep '^\s*[?ACDMR?!]')
-                    [ -z "$svnst" ] || r="$r *"
-                fi
-                vcs="$r"
+            if [ ! -z "$info" ]; then
+                local b=$(__eg_vcs_svn_branch "$info")
+                local r=$(__eg_vcs_svn_revision "$info")
+                echo -n "$b:$r"
             fi
         fi
+    fi
+}
 
-        echo -n "$vcs"
+function __eg_vcs_svn_revision()
+{
+    local r=`echo "$*" | awk '/Revision:/ {print $2}'`
+
+    if [ $? -eq 0 ] && [ ! -z "$r" ]; then
+        if [ ! -z "$SVN_SHOWDIRTYSTATE" ] && [ "$SVN_SHOWDIRTYSTATE" -ne "0" ]; then
+            local svnst flag
+            svnst=$(svn status | grep '^\s*[?ACDMR?!]')
+            [ -z "$svnst" ] || r="$r *"
+        fi
+
+        echo -n $r
+    fi
+}
+
+function __eg_vcs_svn_branch()
+{
+    local url=`echo -e "$*" | awk '/^URL:/ {print $2}'`
+
+    if [[ $url =~ trunk ]]; then
+        echo trunk
+    elif [[ $url =~ /branches/ ]]; then
+        echo $url | sed -e 's#^.*/\(branches/.*\)\(/.*\)\?$#\1#'
+    elif [[ $url =~ /tags/ ]]; then
+        echo $url | sed -e 's#^.*/\(tags/.*\)\(/.*\)\?$#\1#'
     fi
 }
 
@@ -132,7 +154,7 @@ function __eg_vcs_ps1_display
 
 function __eg_vcs_ps1_type
 {
-    if [ -d ".svn" ]; then
+    if [ -n "$(__eg_svn_ps1)" ]; then
         echo -n 'svn'
     elif __eg_function_exists __git_ps1 && [ -n "$(__git_ps1)" ]; then
         echo -n 'git'
@@ -143,7 +165,7 @@ function __eg_vcs_ps1
 {
     local vcs=
 
-    if [ -d ".svn" ]; then
+    if [ -n "$(__eg_svn_ps1)" ]; then
         vcs="$(__eg_svn_ps1)"
     elif __eg_function_exists __git_ps1; then
         vcs=`__git_ps1 "%s"`
