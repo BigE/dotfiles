@@ -106,12 +106,18 @@ function __eg_svn_ps1
         WD=$( while ! test -d ".svn" && [ `pwd` != "/" ]; do cd ..; done; pwd )
         # This assumes we don't have a svn repo at the root folder
         if [ "$WD" != "/" ]; then
+            # grab the info and pass it into the available functions
             local info=$(svn info 2>/dev/null)
 
             if [ ! -z "$info" ]; then
                 local b=$(__eg_vcs_svn_branch "$info")
                 local r=$(__eg_vcs_svn_revision "$info")
-                echo -n "$b:$r"
+
+                if [ ! -z "$b" ]; then
+                    r="$b:$r"
+                fi
+
+                echo -n "$r"
             fi
         fi
     fi
@@ -128,7 +134,7 @@ function __eg_vcs_svn_revision()
             [ -z "$svnst" ] || r="$r *"
         fi
 
-        echo -n $r
+        echo -n "$r"
     fi
 }
 
