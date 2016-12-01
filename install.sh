@@ -7,13 +7,15 @@ then
     exit 1;
 fi
 
-if [ -d $HOME/.byobu/ ]
-then
-    mv $HOME/.byobu/ $HOME/.byobu.bak
+if [ -d $HOME/.byobu ] && [ ! -L $HOME/.byobu ]; then
+    rm -Rf $HOME/.byobu.bak
+    mv -f $HOME/.byobu $HOME/.byobu.bak
 fi
 
 ln -sf $DIR/bashrc $HOME/.bashrc
-ln -sf $DIR/byobu $HOME/.byobu
+if [ ! -L $HOME/.byobu ]; then
+    ln -sf $DIR/byobu $HOME/.byobu
+fi
 ln -sf $DIR/gitconfig $HOME/.gitconfig
 ln -sf $DIR/gitignore $HOME/.gitignore
 ln -sf $DIR/gvimrc $HOME/.gvimrc
