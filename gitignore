@@ -121,3 +121,6 @@ local.properties
 
 # Code Recommenders
 .recommenders/
+
+# Node JS
+/node_modules
