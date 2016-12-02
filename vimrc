@@ -15,6 +15,9 @@ set smarttab
 set shiftwidth=4
 set tabstop=4
 
+" Syntax highlighting default can vary by OS/distro.. let's ensure it's enabled
+syntax enable
+
 set ai
 set si
 set nowrap
