@@ -1,6 +1,9 @@
 set encoding=utf8
 set ffs=unix,dos,mac
 
+" Who doesn't use dark backgrounds in their terminals?..
+set bg=dark
+
 " Turn off backup since most stuff is version controlled anyway.
 set nobackup
 set nowb
