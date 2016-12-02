@@ -1,6 +1,11 @@
 [user]
 	name = Eric Gach
 	email = eric.gach@gmail.com
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
 [include]
 	path = .gitconfig.local
 [push]
