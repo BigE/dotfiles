@@ -21,6 +21,8 @@ syntax enable
 set ai
 set si
 set nowrap
+set number
+set ruler
 
 " Smart way to move between windows
 map <C-j> <C-W>j
