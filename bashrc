@@ -262,15 +262,17 @@ fi
 export PATH=./vendor/bin:$PATH
 
 #Enable colors for ls, etc. Prefer ~/.dir_colors #64489
-if [[ -f ~/.dir_colors ]]; then
-    # local directory colors
-    eval `dircolors -b ~/.dir_colors`
-elif [[ -f /etc/DIR_COLORS ]]; then
-    # This is for Gentoo/RedHat systems
-    eval `dircolors -b /etc/DIR_COLORS`
-else
-    # Added this in for Debian/Ubuntu systems
-    eval `dircolors`
+if __eg_command_exists dircolors; then
+	if [[ -f ~/.dir_colors ]]; then
+		# local directory colors
+		eval `dircolors -b ~/.dir_colors`
+	elif [[ -f /etc/DIR_COLORS ]]; then
+		# This is for Gentoo/RedHat systems
+		eval `dircolors -b /etc/DIR_COLORS`
+	else
+		# Added this in for Debian/Ubuntu systems
+		eval `dircolors`
+	fi
 fi
 
 # show more git info - leaving these disabled, enable them in .bashrc_local
