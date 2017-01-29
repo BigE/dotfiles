@@ -5,7 +5,71 @@
 	co = checkout
 	br = branch
 	ci = commit
-	st = status
+	st = status -s
+	diff = diff --word-diff
+
+# List commits
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+# List changed files in commits
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+# List (no color)
+	lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
+# List with dates
+	lds = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+# List with relative dates
+	ld = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=relative
+# List
+	le = log --oneline --decorate
+# Log tree
+	lt = log --graph --oneline --decorate --all
+	logtree = log --graph --oneline --decorate --all
+
+# Show commits on a file
+	filelog = log -u
+	fl = log -u
+
+# Show modified files in last commit
+	dl = "!git ll -1"
+# Show diff of last commit
+	dlc = diff --cached HEAD^
+
+# Diff of specific revision
+	dr  = "!f() { git diff "$1"^.."$1"; }; f"
+	diffr  = "!f() { git diff "$1"^.."$1"; }; f"
+# List of files change by revision
+	lc  = "!f() { git ll "$1"^.."$1"; }; f"
+
+# Find a file path in codebase:
+	f = "!git ls-files | grep -i"
+
+# Search/grep your entire codebase for a string:
+	grep = grep -Ii
+	gr = grep -Ii
+
+# List all aliases
+	la = "!git config -l | grep alias | cut -c 7-"
+
+# Last tag
+	lasttag = describe --tags --abbrev=0
+	lt = describe --tags --abbrev=0
+
+# Integration helpers
+	ours = "!f() { git co --ours $@ && git add $@; }; f"
+	theirs = "!f() { git co --theirs $@ && git add $@; }; f"
+
+# Reset aliases
+	r = reset
+	r1 = reset HEAD^
+	r2 = reset HEAD^^
+	rh = reset --hard
+	rh1 = reset HEAD^ --hard
+	rh2 = reset HEAD^^ --hard
+
+# Stash
+	sl = stash list
+	sa = stash apply
+	ss = stash save
+
 [include]
 	path = .gitconfig.local
 [push]
