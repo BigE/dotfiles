@@ -103,7 +103,7 @@ function __eg_psgrep()
 function __eg_svn_ps1
 {
     if __eg_command_exists svn; then
-        WD=$( while ! test -d ".svn" && [ `pwd` != "/" ]; do cd ..; done; pwd )
+        WD=$( while ! test -d ".svn" && [[ `pwd` != "/" ]]; do cd ..; done; pwd )
         # This assumes we don't have a svn repo at the root folder
         if [ "$WD" != "/" ]; then
             # grab the info and pass it into the available functions
