@@ -204,6 +204,12 @@ fi
 # import bash completion
 if [ -f /etc/bash_completion ]; then
     source /etc/bash_completion
+elif __eg_command_exists brew; then
+    if [ -f "$(brew --prefix)/etc/bash_completion" ]; then
+	    source "$(brew --prefix)/etc/bash_completion"
+    elif [ -f "$(brew --prefix)/share/bash-completion/bash_completion" ]; then
+    	source "$(brew --prefix)/share/bash-completion/bash_completion"
+    fi
 fi
 
 # Source the git-prompt.sh file for vcs completion
@@ -216,15 +222,6 @@ elif [ -f /usr/share/git/completion/git-prompt.sh ]; then
 elif [ -f /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh ]; then
     # because OSX
     source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
-fi
-
-# Setup the virtualenv wrapper if it exists
-if [[ -f ~/.local/bin/virtualenvwrapper.sh ]]; then
-    source ~/.local/bin/virtualenvwrapper.sh
-elif [[ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]]; then
-    source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
-elif [[ -f /bin/virtualenvwrapper.sh ]]; then
-    source /bin/virtualenvwrapper.sh
 fi
 
 # exports for environment
@@ -289,8 +286,13 @@ export SVN_SHOWDIRTYSTATE=
 # alias setup - these linux specific, feel free to override in .bashrc_local
 ################################################################################
 
+if [[ $OSTYPE == "darwin"* ]]; then
+	alias ls="ls -hG"
+else
+	alias ls="ls -h --color=auto"
+fi
+
 alias grep="grep --color"
-alias ls="ls -h --color=auto"
 alias ll="ls -l"
 alias la="ls -a"
 alias rm="rm -i" # use -i by default to make sure we want to delete it
@@ -317,6 +319,17 @@ WHITE=$(__eg_fg_color 7)
 
 if [ -f $HOME/.bashrc_local ]; then
     source $HOME/.bashrc_local
+fi
+
+# Setup the virtualenv wrapper if it exists
+if [[ -f ~/.local/bin/virtualenvwrapper.sh ]]; then
+    source ~/.local/bin/virtualenvwrapper.sh
+elif [[ -f /usr/share/virtualenvwrapper/virtualenvwrapper.sh ]]; then
+    source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
+elif [[ -f /bin/virtualenvwrapper.sh ]]; then
+    source /bin/virtualenvwrapper.sh
+elif [[ -f /usr/local/bin/virtualenvwrapper.sh ]]; then
+	source /usr/local/bin/virtualenvwrapper.sh
 fi
 
 ################################################################################
