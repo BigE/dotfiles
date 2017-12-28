@@ -26,9 +26,6 @@ if [ -d $HOME/.vim ]; then
     mv -f $HOME/.vim $HOME/.vim.bak
 fi
 
-ln -sf $DIR/zsh/powerlevel9k $DIR/zsh/oh-my-zsh/themes/powerlevel9k
-ln -sf $DIR/zsh/zsh-syntax-highlighting $DIR/zsh/oh-my-zsh/plugins/zsh-syntax-highlighting
-
 ln -sf $DIR/bashrc $HOME/.bashrc
 if [ ! -L $HOME/.byobu ]; then
     ln -sf $DIR/byobu $HOME/.byobu
@@ -37,7 +34,7 @@ ln -sf $DIR/gitconfig $HOME/.gitconfig
 ln -sf $DIR/gitignore $HOME/.gitignore
 ln -sf $DIR/gvimrc $HOME/.gvimrc
 if [ ! -L $HOME/.oh-my-zsh ]; then
-    ln -sf $DIR/oh-my-zsh $HOME/.oh-my-zsh
+    ln -sf $DIR/zsh/oh-my-zsh $HOME/.oh-my-zsh
 fi
 if [ ! -L $HOME/.vim ]; then
     ln -sf $DIR/vim $HOME/.vim
