@@ -18,11 +18,22 @@ set tabstop=4
 " Syntax highlighting default can vary by OS/distro.. let's ensure it's enabled
 syntax enable
 
+" Auto indent
 set ai
 set si
+" I hate soft wraps
 set nowrap
 set number
 set ruler
+" Line numbers are on
+set number
+" Always show tabs
+set showtabline=2
+
+" I like it dark
+colorscheme badwolf
+let g:badwolf_darkgutter=1
+let g:badwolf_tabline=2
 
 " Smart way to move between windows
 map <C-j> <C-W>j
@@ -31,8 +42,31 @@ map <C-h> <C-W>h
 map <C-l> <C-W>l
 
 " Useful mappings for managing tabs
-map <leader>tn :tabnew<cr>
+map <leader>tt :tabnew<cr>
 map <leader>to :tabonly<cr>
 map <leader>tc :tabclose<cr>
 map <leader>tm :tabmove
-map <leader>t<leader> :tabnext
+map <leader>tn :tabnext<cr>
+map <leader>tp :tabprev<cr>
+
+" Powerline Config
+if isdirectory("/usr/local/lib/python3.6/dist-packages/powerline/bindings/vim")
+	set rtp+=/usr/local/lib/python3.6/dist-packages/powerline/bindings/vim
+elseif isdirectory("/usr/local/lib/python3.6/site-packages/powerline/bindings/vim")
+	set rtp+=/usr/local/lib/python3.6/site-packages/powerline/bindings/vim
+endif
+set laststatus=2
+set t_Co=256
+
+" IndentGuides
+let g:indent_guides_enable_on_vim_startup = 0
+
+" Syntastic
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+if filereadable(expand("~/.vimrc_local"))
+	source expand("~/.vimrc_local")
+endif
