@@ -51,8 +51,10 @@ map <leader>tp :tabprev<cr>
 
 " Powerline Config
 if isdirectory("/usr/local/lib/python3.6/dist-packages/powerline/bindings/vim")
+	" OS X - pip3 install powerline-status
 	set rtp+=/usr/local/lib/python3.6/dist-packages/powerline/bindings/vim
 elseif isdirectory("/usr/local/lib/python3.6/site-packages/powerline/bindings/vim")
+	" Ubuntu - apt install powerline
 	set rtp+=/usr/local/lib/python3.6/site-packages/powerline/bindings/vim
 endif
 set laststatus=2
