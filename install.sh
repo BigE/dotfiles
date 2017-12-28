@@ -7,7 +7,7 @@ then
     exit 1;
 fi
 
-if [[ ! -d $PWD/oh-my-zsh ]]; then
+if [[ ! -d $PWD/zsh/oh-my-zsh ]]; then
     echo "ERROR: You must run \`git submodule update --init --recursive\` first"
 fi
 
@@ -26,7 +26,8 @@ if [ -d $HOME/.vim ]; then
     mv -f $HOME/.vim $HOME/.vim.bak
 fi
 
-ln -sf $DIR/powerlevel9k $DIR/oh-my-zsh/themes/powerlevel9k
+ln -sf $DIR/zsh/powerlevel9k $DIR/zsh/oh-my-zsh/themes/powerlevel9k
+ln -sf $DIR/zsh/zsh-syntax-highlighting $DIR/zsh/oh-my-zsh/plugins/zsh-syntax-highlighting
 
 ln -sf $DIR/bashrc $HOME/.bashrc
 if [ ! -L $HOME/.byobu ]; then

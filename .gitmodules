@@ -1,5 +1,5 @@
 [submodule "oh-my-zsh"]
-	path = oh-my-zsh
+	path = zsh/oh-my-zsh
 	url = https://github.com/robbyrussell/oh-my-zsh.git
 [submodule "vim/pack/plugins/start/syntastic"]
 	path = vim/pack/plugins/start/syntastic
@@ -19,3 +19,6 @@
 [submodule "powerlevel9k"]
 	path = powerlevel9k
 	url = https://github.com/bhilburn/powerlevel9k.git
+[submodule "zsh-syntax-highlighting"]
+	path = zsh/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
