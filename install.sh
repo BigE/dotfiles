@@ -16,6 +16,18 @@ if [ -d $HOME/.byobu ] && [ ! -L $HOME/.byobu ]; then
     mv -f $HOME/.byobu $HOME/.byobu.bak
 fi
 
+if [ -d $HOME/.oh-my-zsh ]; then
+    rm -Rf $HOME/.oh-my-zsh.bak
+    mv -f $HOME/.oh-my-zsh $HOME/.oh-my-zsh.bak
+fi
+
+if [ -d $HOME/.vim ]; then
+    rm -Rf $HOME/.vim.bak
+    mv -f $HOME/.vim $HOME/.vim.bak
+fi
+
+ln -sf $DIR/powerlevel9k $DIR/oh-my-zsh/themes/powerlevel9k
+
 ln -sf $DIR/bashrc $HOME/.bashrc
 if [ ! -L $HOME/.byobu ]; then
     ln -sf $DIR/byobu $HOME/.byobu
