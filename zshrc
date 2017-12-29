@@ -1,7 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
-if [ -f $HOME/.localrc ]; then
-  source $HOME/.localrc
+if [ -f $HOME/.commonrc ]; then
+  source $HOME/.commonrc
 fi
 
 # Path to your oh-my-zsh installation.

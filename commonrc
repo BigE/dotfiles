@@ -1,0 +1,22 @@
+# DON'T EDIT THIS FILE
+# If you would like a common place to put things, please create a ~/.localrc
+# since this file will include it
+
+# Define the WORKON_HOME for virtualenv
+if [ -z "$WORKON_HOME" ]; then
+    export WORKON_HOME=$HOME/.virtualenvs
+fi
+
+# Define the PROJECT_HOME for virtualenv
+if [ -z "$PROJECT_HOME" ]; then
+    export PROJECT_HOME=$HOME/Projects
+fi
+
+# vendor/bin/ for composer projects
+# ~/.local/bin for local stuffs
+export PATH=./vendor/bin/:$HOME/.local/bin:$PATH
+
+# Import any local configs
+if [ -f $HOME/.localrc ]; then
+    source $HOME/.localrc
+fi

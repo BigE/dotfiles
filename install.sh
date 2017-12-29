@@ -30,6 +30,7 @@ ln -sf $DIR/bashrc $HOME/.bashrc
 if [ ! -L $HOME/.byobu ]; then
     ln -sf $DIR/byobu $HOME/.byobu
 fi
+ln -sf $DIR/commonrc $HOME/.commonrc
 ln -sf $DIR/gitconfig $HOME/.gitconfig
 ln -sf $DIR/gitignore $HOME/.gitignore
 ln -sf $DIR/gvimrc $HOME/.gvimrc
@@ -40,3 +41,4 @@ if [ ! -L $HOME/.vim ]; then
     ln -sf $DIR/vim $HOME/.vim
 fi
 ln -sf $DIR/vimrc $HOME/.vimrc
+ln -sf $DIR/zshrc $HOME/.zshrc
