@@ -75,6 +75,7 @@ plugins=(
   dotenv
   git
   git-flow
+  git-flow-completion
   osx
   pip
   pyenv
@@ -83,6 +84,7 @@ plugins=(
   sudo
   svn
   symfony2
+  virtualenv
   virtualenvwrapper
   yarn
   zsh-syntax-highlighting
