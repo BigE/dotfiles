@@ -12,7 +12,7 @@ if [ -z "$PROJECT_HOME" ]; then
     export PROJECT_HOME=$HOME/Projects
 fi
 
-# vendor/bin/ for composer projects
+# vendor/bin/ for composer projects - see http://getcomposer.org
 # ~/.local/bin for local stuffs
 export PATH=./vendor/bin/:$HOME/.local/bin:$PATH
 

@@ -224,6 +224,11 @@ elif [ -f /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh ]
     source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 fi
 
+# Generic setup for environment
+if [ -f $HOME/.commonrc ]; then
+    source $HOME/.commonrc
+fi
+
 # exports for environment
 
 # Disable the virtual environment prompt, I prefer my own
@@ -231,12 +236,12 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # if not already set, virtualenvs should reside here
 if [ -z "$WORKON_HOME" ]; then
-    export WORKON_HOME=~/.virtualenvs
+    export WORKON_HOME=$HOME/.virtualenvs
 fi
 
 # This is where I like to keep my projects
 if [ -z "$PROJECT_HOME" ]; then
-    export PROJECT_HOME=~/Projects
+    export PROJECT_HOME=$HOME/Projects
 fi
 
 # My editor
@@ -248,15 +253,6 @@ elif __eg_command_exists nano
 then
     export EDITOR="nano" # not diety
 fi
-
-# add local bin directory to $PATH if it exists
-if [[ -d $HOME/.local/bin ]]
-then
-    export PATH=$HOME/.local/bin:$PATH
-fi
-
-# support for composer projects - see http://getcomposer.org
-export PATH=./vendor/bin:$PATH
 
 #Enable colors for ls, etc. Prefer ~/.dir_colors #64489
 if __eg_command_exists dircolors; then
