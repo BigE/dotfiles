@@ -65,28 +65,7 @@ POWERLEVEL9K_MODE="nerdfont-complete"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  brew
-  capistrano
-  colored-man
-  colorize
-  command-not-found
-  docker
-  docker-compose
-  dotenv
-  git
-  git-flow
-  git-flow-completion
-  osx
-  pip
-  pyenv
-  pylint
-  python
-  sudo
-  svn
-  symfony2
-  virtualenv
   virtualenvwrapper
-  yarn
   zsh-syntax-highlighting
 )
 
