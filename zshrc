@@ -1,3 +1,5 @@
+# My custom zshrc using zplug
+
 zsh_wifi_signal(){
   local signal=""
   if which nmcli &> /dev/null; then
@@ -57,6 +59,8 @@ source ~/.zplug/init.zsh
 zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
 
 zplug "lib/completion", from:oh-my-zsh
+zplug "lib/directories", from:oh-my-zsh
+zplug "lib/key-bindings", from:oh-my-zsh
 zplug "lib/termsupport", from:oh-my-zsh
 zplug "plugins/capistrano", from:oh-my-zsh, if:"which cap"
 zplug "plugins/git", from:oh-my-zsh, if:"which git"
@@ -92,18 +96,15 @@ if [[ $OSTYPE = (darwin|freebsd)* ]]; then
 
 	# Prefer GNU version, since it respects dircolors.
 	if which gls &>/dev/null; then
-		alias ls='() { $(whence -p gls) -Ctr --file-type --color=auto $@ }'
+		alias ls='() { $(whence -p gls) -Ctrh --file-type --color=auto $@ }'
 	else
-		alias ls='() { $(whence -p ls) -CFtr $@ }'
+		alias ls='() { $(whence -p ls) -CFtrh $@ }'
 	fi
 else
-	alias ls='() { $(whence -p ls) -Ctr --file-type --color=auto $@ }'
+	alias ls='() { $(whence -p ls) -Ctrh --file-type --color=auto $@ }'
 fi
 
 alias grep='() { $(whence -p grep) --color=auto $@ }'
-
-alias la="ls -a"
-alias ll="ls -l"
 
 ###############################################################################
 # STARTUP
@@ -122,3 +123,6 @@ fi
 
 # Load all the plugins
 zplug load
+
+# We done.
+# vim: ft=zsh
