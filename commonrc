@@ -36,6 +36,4 @@ function __eg_psgrep()
 alias psgrep=__eg_psgrep
 
 # Import any local configs
-if [ -f $HOME/.localrc ]; then
-    source $HOME/.localrc
-fi
+[ -f ~/.localrc ] && source ~/.localrc
