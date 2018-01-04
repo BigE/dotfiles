@@ -84,22 +84,6 @@ function __eg_prompt_symbol
     echo -ne '%'
 }
 
-###
-# Combines `ps` and `grep` to easily search processes. To pass arguments to ps
-# place them before the search term: `__eg_psgrep aux httpd` Simply calling the
-# function and passing a search term will execute `ps aux`
-##
-function __eg_psgrep()
-{
-    if [ "$#" -eq 1 ]
-    then
-        ps aux | grep -v grep | grep --color ${@:1}
-    else
-        ps $1 | grep -v grep | grep --color ${@:2}
-    fi
-
-}
-
 function __eg_svn_ps1
 {
     if __eg_command_exists svn; then
@@ -292,8 +276,6 @@ alias grep="grep --color"
 alias ll="ls -l"
 alias la="ls -a"
 alias rm="rm -i" # use -i by default to make sure we want to delete it
-# make easier use of the awesomeness
-alias psgrep=__eg_psgrep
 
 ################################################################################
 # I almost felt like these were clutter... almost.

@@ -16,6 +16,25 @@ fi
 # ~/.local/bin for local stuffs
 export PATH=./vendor/bin/:$HOME/.local/bin:$PATH
 
+###
+# Combines `ps` and `grep` to easily search processes. To pass arguments to ps
+# place them before the search term: `__eg_psgrep aux httpd` Simply calling the
+# function and passing a search term will execute `ps aux`
+##
+function __eg_psgrep()
+{
+    if [ "$#" -eq 1 ]
+    then
+        ps aux | grep -v grep | grep --color ${@:1}
+    else
+        ps $1 | grep -v grep | grep --color ${@:2}
+    fi
+
+}
+
+# make easier use of the awesomeness
+alias psgrep=__eg_psgrep
+
 # Import any local configs
 if [ -f $HOME/.localrc ]; then
     source $HOME/.localrc
