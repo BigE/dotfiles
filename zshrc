@@ -81,7 +81,7 @@ zsh_wifi_signal(){
     local signal=$(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep CtlRSSI | awk '{print $2}' | tr -d -)
   fi
 
-  if [ -n $signal ]; then
+  if [[ ! -z "$signal" ]]; then
     local color='%F{yellow}'
     [[ $signal -gt 75 ]] && color='%F{green}'
     [[ $signal -lt 50 ]] && color='%F{red}'
