@@ -49,6 +49,9 @@ map <leader>tm :tabmove
 map <leader>tn :tabnext<cr>
 map <leader>tp :tabprev<cr>
 
+set laststatus=2
+set t_Co=256
+
 " Powerline Config
 if isdirectory("/usr/local/lib/python3.6/dist-packages/powerline/bindings/vim")
 	" OS X - pip3 install powerline-status
@@ -57,8 +60,6 @@ elseif isdirectory("/usr/local/lib/python3.6/site-packages/powerline/bindings/vi
 	" Ubuntu - apt install powerline
 	set rtp+=/usr/local/lib/python3.6/site-packages/powerline/bindings/vim
 endif
-set laststatus=2
-set t_Co=256
 
 " IndentGuides
 let g:indent_guides_enable_on_vim_startup = 0
@@ -69,6 +70,6 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-if filereadable(expand("~/.vimrc_local"))
-	source expand("~/.vimrc_local")
+if !empty(glob("~/.vimrc_local"))
+	source ~/.vimrc_local
 endif
