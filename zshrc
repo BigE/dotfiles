@@ -65,6 +65,8 @@ zplug "lib/directories", from:oh-my-zsh
 zplug "lib/grep", from:oh-my-zsh
 zplug "lib/key-bindings", from:oh-my-zsh
 zplug "lib/termsupport", from:oh-my-zsh
+zplug "plugins/docker", from:oh-my-zsh, if:"which docker"
+zplug "plugins/docker-compose", from:oh-my-zsh, if:"which docker"
 zplug "plugins/git", from:oh-my-zsh, if:"which git"
 zplug "plugins/sudo", from:oh-my-zsh, if:"which sudo"
 zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
