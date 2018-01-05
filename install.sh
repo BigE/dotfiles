@@ -23,5 +23,6 @@ ln -sf $DIR/gvimrc $HOME/.gvimrc
 if [ ! -L $HOME/.vim ]; then
     ln -sf $DIR/vim $HOME/.vim
 fi
+ln -sf $DIR/tmux.conf $HOME/.tmux.conf
 ln -sf $DIR/vimrc $HOME/.vimrc
 ln -sf $DIR/zshrc $HOME/.zshrc
