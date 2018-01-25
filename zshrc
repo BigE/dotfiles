@@ -68,8 +68,10 @@ zplug "lib/termsupport", from:oh-my-zsh
 zplug "plugins/docker", from:oh-my-zsh, if:"which docker"
 zplug "plugins/docker-compose", from:oh-my-zsh, if:"which docker"
 zplug "plugins/git", from:oh-my-zsh, if:"which git"
+zplug "plugins/pip", from:oh-my-zsh
+zplug "plugins/rvm", from:oh-my-zsh, if:"which rvm"
 zplug "plugins/sudo", from:oh-my-zsh, if:"which sudo"
-zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
+#zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
 zplug "plugins/virtualenvwrapper", from:oh-my-zsh, if:"which python"
 
 if [[ $OSTYPE = (linux)* ]]; then

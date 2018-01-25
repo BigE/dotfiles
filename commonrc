@@ -14,7 +14,7 @@ fi
 
 # vendor/bin/ for composer projects - see http://getcomposer.org
 # ~/.local/bin for local stuffs
-export PATH=./vendor/bin/:$HOME/.local/bin:$PATH
+export -U PATH=./vendor/bin:$HOME/.local/bin:$PATH:$HOME/.rvm/bin
 
 ###
 # Combines `ps` and `grep` to easily search processes. To pass arguments to ps
