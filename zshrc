@@ -16,13 +16,20 @@ zsh_wifi_signal(){
   fi
 }
 
+if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
+	export -U PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+	export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+fi
+
+powerline-daemon -q
+
 POWERLEVEL9K_CUSTOM_WIFI_SIGNAL_BACKGROUND="black"
 POWERLEVEL9K_CUSTOM_WIFI_SIGNAL="zsh_wifi_signal"
 
 POWERLEVEL9K_MODE="nerdfont-complete"
 
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator os_icon context dir dir_writable vcs rbenv virtualenv)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator os_icon context dir dir_writable vcs pyenv rbenv virtualenv)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time_joined background_jobs load ram custom_wifi_signal battery ssh)
 
 POWERLEVEL9K_CONTEXT_TEMPLATE="%n@%m"
@@ -48,6 +55,8 @@ ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
 ZSH_HIGHLIGHT_STYLES[precommand]='fg=green,bold'
 ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=green,bold'
 
+export PYENV_ROOT="$HOME/.pyenv"
+
 ###############################################################################
 # PLUGINS
 ###############################################################################
@@ -57,7 +66,11 @@ ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=green,bold'
 source ~/.zplug/init.zsh
 
 # theme
-zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
+zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
+
+# other plugins
+zplug "zsh-users/zsh-completions", defer:0
+zplug "zsh-users/zsh-syntax-highlighting", defer:3
 
 # pull in parts from oh-my-zsh
 zplug "lib/completion", from:oh-my-zsh
@@ -66,13 +79,15 @@ zplug "lib/grep", from:oh-my-zsh
 zplug "lib/key-bindings", from:oh-my-zsh
 zplug "lib/termsupport", from:oh-my-zsh
 zplug "plugins/docker", from:oh-my-zsh, if:"which docker"
-zplug "plugins/docker-compose", from:oh-my-zsh, if:"which docker"
+zplug "plugins/docker-compose", from:oh-my-zsh, if:"which docker-compose"
 zplug "plugins/git", from:oh-my-zsh, if:"which git"
-zplug "plugins/pip", from:oh-my-zsh
-zplug "plugins/rvm", from:oh-my-zsh, if:"which rvm"
+zplug "plugins/git-flow-avh", from:oh-my-zsh, if:"which git-flow"
+zplug "plugins/pip", from:oh-my-zsh, if:"which python"
+zplug "plugins/virtualenvwrapper", from:oh-my-zsh, if:"which python"
 zplug "plugins/sudo", from:oh-my-zsh, if:"which sudo"
 #zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
-zplug "plugins/virtualenvwrapper", from:oh-my-zsh, if:"which python"
+zplug "plugins/pyenv", from:oh-my-zsh, if:"which pyenv"
+zplug "plugins/rvm", from:oh-my-zsh, if:"which rvm"
 
 if [[ $OSTYPE = (linux)* ]]; then
 	zplug "plugins/archlinux", from:oh-my-zsh, if:"which pacman"
@@ -84,10 +99,6 @@ if [[ $OSTYPE = (darwin)* ]]; then
 	zplug "plugins/brew",     from:oh-my-zsh, if:"which brew"
 	zplug "plugins/macports", from:oh-my-zsh, if:"which port"
 fi
-
-# other plugins
-zplug "zsh-users/zsh-completions", defer:0
-zplug "zsh-users/zsh-syntax-highlighting", defer:3
 
 ###############################################################################
 # OPTIONS
@@ -130,6 +141,8 @@ else
 	alias ls='() { $(whence -p ls) -Ch --file-type --color=auto $@ }'
 fi
 
+alias rm='rm -i'
+
 ###############################################################################
 # STARTUP
 ###############################################################################
@@ -148,7 +161,10 @@ if ! zplug check; then
 fi
 
 # Load all the plugins
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 zplug load
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # We done.
 # vim: ft=zsh
