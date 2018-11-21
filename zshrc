@@ -1,4 +1,5 @@
 # My custom zshrc using zplug
+#zmodload zsh/zprof
 
 zsh_wifi_signal(){
   local signal=""
@@ -21,8 +22,10 @@ if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
 	export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 fi
 
+# start the powerline daemon
 powerline-daemon -q
 
+# Generic settings
 POWERLEVEL9K_CUSTOM_WIFI_SIGNAL_BACKGROUND="black"
 POWERLEVEL9K_CUSTOM_WIFI_SIGNAL="zsh_wifi_signal"
 
@@ -61,48 +64,72 @@ export PYENV_ROOT="$HOME/.pyenv"
 # PLUGINS
 ###############################################################################
 
-# We need zplug to function
-[ -d ~/.zplug ] || git clone https://github.com/zplug/zplug ~/.zplug
-source ~/.zplug/init.zsh
+[ -d ~/.zgen ] || git clone https://github.com/tarjoilija/zgen.git ~/.zgen
+source ~/.zgen/zgen.zsh
 
-# theme
-zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, as:theme
+# if the init script doesn't exist
+if ! zgen saved; then
 
-# other plugins
-zplug "zsh-users/zsh-completions", defer:0
-zplug "zsh-users/zsh-syntax-highlighting", defer:3
+	# other plugins
+	zgen load zsh-users/zsh-completions
+	zgen load zsh-users/zsh-syntax-highlighting
 
-# pull in parts from oh-my-zsh
-zplug "lib/completion", from:oh-my-zsh
-zplug "lib/directories", from:oh-my-zsh
-zplug "lib/grep", from:oh-my-zsh
-zplug "lib/key-bindings", from:oh-my-zsh
-zplug "lib/termsupport", from:oh-my-zsh
-zplug "plugins/docker", from:oh-my-zsh, if:"which docker"
-zplug "plugins/docker-compose", from:oh-my-zsh, if:"which docker-compose"
-zplug "plugins/git", from:oh-my-zsh, if:"which git"
-zplug "plugins/git-flow-avh", from:oh-my-zsh, if:"which git-flow"
-zplug "plugins/pip", from:oh-my-zsh, if:"which python"
-zplug "plugins/virtualenvwrapper", from:oh-my-zsh, if:"which python"
-zplug "plugins/sudo", from:oh-my-zsh, if:"which sudo"
-#zplug "plugins/tmux", from:oh-my-zsh, if:"which tmux"
-zplug "plugins/pyenv", from:oh-my-zsh, if:"which pyenv"
-zplug "plugins/rvm", from:oh-my-zsh, if:"which rvm"
+	# init oh-my-zsh core
+	zgen oh-my-zsh
+	# pull in plugins from oh-my-zsh
+	zgen oh-my-zsh plugins/command-not-found
+	zgen oh-my-zsh plugins/docker
+	zgen oh-my-zsh plugins/docker-compose
+	zgen oh-my-zsh plugins/git
+	zgen oh-my-zsh plugins/git-flow-avh
+	#zgen oh-my-zsh plugins/nvm
+	zgen oh-my-zsh plugins/pip
+	#zgen oh-my-zsh plugins/pyenv
+	#zgen oh-my-zsh plugins/rvm
+	zgen oh-my-zsh plugins/sudo
+	#zgen oh-my-zsh plugins/tmux
+	zgen oh-my-zsh plugins/virtualenvwrapper
 
-if [[ $OSTYPE = (linux)* ]]; then
-	zplug "plugins/archlinux", from:oh-my-zsh, if:"which pacman"
-	zplug "plugins/dnf",       from:oh-my-zsh, if:"which dnf"
-fi
+	if [[ $OSTYPE = (linux)* ]]; then
+		if type pacman > /dev/null; then
+			zgen oh-my-zsh plugins/archlinux
+		fi
 
-if [[ $OSTYPE = (darwin)* ]]; then
-	zplug "plugins/osx",      from:oh-my-zsh
-	zplug "plugins/brew",     from:oh-my-zsh, if:"which brew"
-	zplug "plugins/macports", from:oh-my-zsh, if:"which port"
+		if type dnf > /dev/null; then
+			zgen oh-my-zsh plugins/dnf
+		fi
+	fi
+
+	if [[ $OSTYPE = (darwin)* ]]; then
+		zgen oh-my-zsh plugins/osx
+
+		if type brew > /dev/null; then
+			zgen oh-my-zsh plugins/brew
+		fi
+
+		if type port > /dev/null; then
+			zgen oh-my-zsh plugins/macports
+		fi
+	fi
+
+	# theme it up bitches
+	zgen load bhilburn/powerlevel9k powerlevel9k
+
+	# speedup startup
+	zgen save
 fi
 
 ###############################################################################
 # OPTIONS
 ###############################################################################
+
+if [ -z "$HISTFILE" ]; then
+	export HISTFILE="~/.zsh_history"
+fi
+
+if [ -z "$SAVEHIST" ]; then
+	export SAVEHIST=10000
+fi
 
 export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen --RAW-CONTROL-CHARS"
 setopt autocd                   # Allow changing directories without `cd`
@@ -153,18 +180,19 @@ zstyle ":completion:*:default" list-colors ${(s.:.)LS_COLORS}
 [ -f ~/.commonrc ] && source ~/.commonrc
 
 # Check to ensure all plugins are installed
-if ! zplug check; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
+#if ! zplug check; then
+#    printf "Install? [y/N]: "
+#    if read -q; then
+#        echo; zplug install
+#    fi
+#fi
 
 # Load all the plugins
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-zplug load
+#zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+#zplug load
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+#zprof
 # We done.
 # vim: ft=zsh
