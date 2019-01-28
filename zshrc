@@ -23,7 +23,9 @@ if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
 fi
 
 # start the powerline daemon
-powerline-daemon -q
+if which powerline-daemon &> /dev/null; then
+	powerline-daemon -q
+fi
 
 # Generic settings
 POWERLEVEL9K_CUSTOM_WIFI_SIGNAL_BACKGROUND="black"
@@ -65,7 +67,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 ###############################################################################
 
 if [ -z "$HISTFILE" ]; then
-	export HISTFILE="~/.zsh_history"
+	export HISTFILE="$HOME/.zsh_history"
 fi
 
 if [ -z "$SAVEHIST" ]; then
