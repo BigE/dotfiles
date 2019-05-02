@@ -136,17 +136,18 @@ if ! zgen saved; then
 	zgen oh-my-zsh
 	# pull in plugins from oh-my-zsh
 	zgen oh-my-zsh plugins/command-not-found
+	zgen oh-my-zsh plugins/django
 	zgen oh-my-zsh plugins/docker
 	zgen oh-my-zsh plugins/docker-compose
 	zgen oh-my-zsh plugins/git
 	zgen oh-my-zsh plugins/git-flow-avh
-	#zgen oh-my-zsh plugins/nvm
 	zgen oh-my-zsh plugins/pip
-	#zgen oh-my-zsh plugins/pyenv
-	#zgen oh-my-zsh plugins/rvm
 	zgen oh-my-zsh plugins/sudo
 	#zgen oh-my-zsh plugins/tmux
 	zgen oh-my-zsh plugins/virtualenvwrapper
+	zgen oh-my-zsh plugins/vscode
+	zgen oh-my-zsh plugins/wp-cli
+	zgen oh-my-zsh plugins/yarn
 
 	if [[ $OSTYPE = (linux)* ]]; then
 		if type pacman > /dev/null; then
@@ -169,6 +170,10 @@ if ! zgen saved; then
 			zgen oh-my-zsh plugins/macports
 		fi
 	fi
+
+	zgen oh-my-zsh plugins/pyenv
+	zgen oh-my-zsh plugins/nvm
+	zgen oh-my-zsh plugins/rvm
 
 	# theme it up bitches
 	zgen load bhilburn/powerlevel9k powerlevel9k
