@@ -14,12 +14,7 @@ fi
 
 # vendor/bin/ for composer projects - see http://getcomposer.org
 # ~/.local/bin for local stuffs
-export PATH=./vendor/bin:$HOME/.local/bin:$PATH:$HOME/.rvm/bin
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+export PATH=./vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:$PATH
 
 ###
 # Combines `ps` and `grep` to easily search processes. To pass arguments to ps
@@ -46,6 +41,11 @@ alias psgrep=__eg_psgrep
 if [ -z "$EDITOR" ] && (( $+commands[vim] )) ; then
     export EDITOR=$(which vim)
 fi
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
 # If zsh, make sure our path is unique
 if [ "$0" = "zsh" ]; then
