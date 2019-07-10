@@ -176,7 +176,8 @@ if ! zgen saved; then
 	zgen oh-my-zsh plugins/rvm
 
 	# theme it up bitches
-	zgen load bhilburn/powerlevel9k powerlevel9k
+	#zgen load bhilburn/powerlevel9k powerlevel9k
+	zgen load romkatv/powerlevel10k powerlevel10k
 
 	# speedup startup
 	zgen save
