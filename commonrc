@@ -51,3 +51,18 @@ export PATH="$PATH:$HOME/.rvm/bin"
 if [ "$0" = "zsh" ]; then
     export -U PATH="$PATH"
 fi
+
+function __eg_capture() {
+    if [[ $OSTYPE = (darwin)* ]]; then
+        sudo dtrace -p "$1" -qn '
+            syscall::write*:entry
+            /pid == $target && arg0 == 1/ {
+                printf("%s", copyinstr(arg1, arg2));
+            }
+        '
+    else
+        sudo strace -p"$1" -s9999 -e write
+    fi
+}
+
+alias capture=__eg_capture
