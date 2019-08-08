@@ -60,9 +60,35 @@ function __eg_capture() {
                 printf("%s", copyinstr(arg1, arg2));
             }
         '
-    else
+    elif [[ $OSTYPE = (linux)* ]]; then
         sudo strace -p"$1" -s9999 -e write
     fi
 }
 
 alias capture=__eg_capture
+
+if [[ $OSTYPE = (darwin)* ]]; then
+    function __eg_mysql() {
+        if [ -z "$1" ] && [ -z "$EG_MYSQL_OLD_PATH" ]; then
+            echo "You must specify the MySQL version";
+            return;
+        elif [ ! -z "$1" ] && [ ! -d "/usr/local/opt/mysql@${1}" ]; then
+            echo "MySQL version ${1} is not installed";
+            return;
+        fi
+
+        version="$1"
+
+        if [ ! -z "$EG_MYSQL_OLD_PATH" ]; then
+            export PATH="$EG_MYSQL_OLD_PATH"
+            unset EG_MYSQL_OLD_PATH
+        fi
+
+        if [ ! -z "$version" ]; then
+            export EG_MYSQL_OLD_PATH="$PATH"
+            export PATH="/usr/local/opt/mysql@${version}/bin:$PATH"
+        fi
+    }
+
+    alias mysqlenv=__eg_mysql
+fi
