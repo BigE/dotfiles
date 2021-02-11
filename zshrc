@@ -39,8 +39,8 @@ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time_joined backgro
 
 POWERLEVEL9K_CONTEXT_TEMPLATE="%n@%m"
 POWERLEVEL9K_EXECUTION_TIME_ICON="\u23F1"
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=$'\u256D'$'\U2500'
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=$'\u2570'$'\uF460 '
+POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="\u256D""\u2500"
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="\u2570""\uF460 "
 POWERLEVEL9K_TIME_FORMAT="%D{\uF017 %T}"
 
 ZSH_TMUX_ITERM2=false
@@ -130,7 +130,18 @@ source ~/.zgen/zgen.zsh
 if ! zgen saved; then
 
 	# other plugins
-	zgen load zsh-users/zsh-completions
+	zgen load zsh-users/zsh-completions src
+
+	# system packages
+	if [ -d /usr/share/zsh/site-functions ]; then
+		zgen load /usr/share/zsh/site-functions
+	fi
+	
+	# local system packages
+	if [ -d /usr/local/share/zsh/site-functions ]; then
+		zgen load /usr/local/share/zsh/site-functions
+	fi
+	
 	zgen load zsh-users/zsh-syntax-highlighting
 
 	# init oh-my-zsh core
@@ -157,6 +168,10 @@ if ! zgen saved; then
 
 		if type dnf > /dev/null; then
 			zgen oh-my-zsh plugins/dnf
+		fi
+
+		if type apt > /dev/null; then
+			zgen oh-my-zsh plugins/debian;
 		fi
 	fi
 
