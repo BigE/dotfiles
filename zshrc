@@ -17,6 +17,7 @@ zsh_wifi_signal(){
   fi
 }
 
+# On MacOS we want to use the GNU coreutils
 if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
 	export -U PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 	export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
@@ -154,7 +155,6 @@ if ! zgen saved; then
 	zgen oh-my-zsh plugins/git-flow-avh
 	zgen oh-my-zsh plugins/pip
 	zgen oh-my-zsh plugins/sudo
-	#zgen oh-my-zsh plugins/tmux
 	zgen oh-my-zsh plugins/virtualenvwrapper
 	zgen oh-my-zsh plugins/vscode
 	zgen oh-my-zsh plugins/wp-cli
@@ -191,7 +191,6 @@ if ! zgen saved; then
 	zgen oh-my-zsh plugins/rvm
 
 	# theme it up bitches
-	#zgen load bhilburn/powerlevel9k powerlevel9k
 	zgen load romkatv/powerlevel10k powerlevel10k
 
 	# speedup startup
