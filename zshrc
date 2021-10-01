@@ -148,7 +148,6 @@ if ! zgen saved; then
 	zgen oh-my-zsh
 	# pull in plugins from oh-my-zsh
 	zgen oh-my-zsh plugins/command-not-found
-	zgen oh-my-zsh plugins/django
 	zgen oh-my-zsh plugins/docker
 	zgen oh-my-zsh plugins/docker-compose
 	zgen oh-my-zsh plugins/git
