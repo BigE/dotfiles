@@ -17,12 +17,15 @@ fi
 
 ln -sf $DIR/bashrc $HOME/.bashrc
 ln -sf $DIR/commonrc $HOME/.commonrc
+ln -sf $DIR/cprofile $HOME/.cprofile
 ln -sf $DIR/gitconfig $HOME/.gitconfig
 ln -sf $DIR/gitignore $HOME/.gitignore
 ln -sf $DIR/gvimrc $HOME/.gvimrc
+ln -sf $DIR/profile $HOME/.profile
 if [ ! -L $HOME/.vim ]; then
     ln -sf $DIR/vim $HOME/.vim
 fi
 ln -sf $DIR/tmux.conf $HOME/.tmux.conf
 ln -sf $DIR/vimrc $HOME/.vimrc
+ln -sf $DIR/zprofile $HOME/.zprofile
 ln -sf $DIR/zshrc $HOME/.zshrc
