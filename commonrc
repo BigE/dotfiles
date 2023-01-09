@@ -29,17 +29,37 @@ fi
 ##
 function __eg_psgrep()
 {
+    search=${@:$#}
+
     if [ "$#" -eq 1 ]
     then
-        ps aux | grep -v grep | grep --color ${@:1}
+        ps aux | head -n1; ps aux | grep -v grep | grep --color=always $search
     else
-        ps $1 | grep -v grep | grep --color ${@:2}
+        # keep the space here for zsh
+        # https://stackoverflow.com/questions/1215538/extract-parameters-before-last-parameter-in#comment112570591_1215592
+        args=${@:1:$# -1}
+        echo "${args}" | xargs ps | head -n1; echo "${args}" | xargs ps | grep -v grep | grep --color=always $search
     fi
 
 }
 
 # make easier use of the awesomeness
 alias psgrep=__eg_psgrep
+
+function __es_pssize()
+{
+    search=${@:$#}
+
+    if [ "$#" -eq 1 ]; then
+        command=(__eg_psgrep -eo size,pid,user,command --sort -size $search)
+    else
+        command=(ps -eo size,pid,user,command --sort -size)
+    fi
+
+    "${command[@]}" | awk '{ hr=$1/1024 ; printf("%13.2f Mb ",hr) } { for ( x=2 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
+}
+
+alias pssize=__es_pssize
 
 # Import any local configs
 [ -f ~/.localrc ] && source ~/.localrc
