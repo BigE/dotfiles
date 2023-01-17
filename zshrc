@@ -62,8 +62,6 @@ ZSH_HIGHLIGHT_STYLES[command]='fg=green,bold'
 ZSH_HIGHLIGHT_STYLES[precommand]='fg=green,bold'
 ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=green,bold'
 
-export PYENV_ROOT="$HOME/.pyenv"
-
 ###############################################################################
 # OPTIONS
 ###############################################################################
@@ -93,6 +91,10 @@ setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
 ###############################################################################
 
 # Directory coloring
+
+#disable oh-my-zsh from making aliases, I do what I want
+DISABLE_LS_COLORS=true
+
 if [[ $OSTYPE = (darwin|freebsd)* ]]; then
 	export CLICOLOR="YES" # Equivalent to passing -G to ls.
 	export LSCOLORS="ExGxFxdaCxDaDahbadacec"
@@ -105,15 +107,15 @@ if [[ $OSTYPE = (darwin|freebsd)* ]]; then
 
 	# Prefer GNU version, since it respects dircolors.
 	if which gls &>/dev/null; then
-		alias ls='() { $(whence -p gls) -Ch --file-type --color=auto $@ }'
+		alias ls='gls -Ch --file-type --color=auto'
 	else
-		alias ls='() { $(whence -p ls) -CFh $@ }'
+		alias ls='ls -CFh'
 	fi
 else
-	alias ls='() { $(whence -p ls) -Ch --file-type --color=auto $@ }'
+	alias ls='ls -Ch --file-type --color=auto'
 fi
 
-alias rm='() { $(whence -p rm) -i $@ }'
+alias rm='rm -i'
 zstyle ":completion:*:default" list-colors ${(s.:.)LS_COLORS}
 
 ###############################################################################

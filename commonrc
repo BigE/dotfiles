@@ -1,6 +1,6 @@
 # DON'T EDIT THIS FILE
 # If you would like a common place to put things, please create a ~/.localrc
-# since this file will include it
+# since this file will include it after all variables are defined.
 
 # Define the WORKON_HOME for virtualenv
 if [ -z "$WORKON_HOME" ]; then
@@ -16,10 +16,57 @@ fi
 # ~/.local/bin for local stuffs
 export PATH=./vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:$PATH
 
+# export pyenv environment
+if [ -z "$PYENV_ROOT" ]; then
+    export PYENV_ROOT="$HOME/.pyenv"
+fi
+
 # Setup phpenv if it exists
 if [ -d "$HOME/.phpenv/bin" ]; then
     export PATH="$HOME/.phpenv/bin/:$PATH"
     eval "$(phpenv init -)"
+fi
+
+# Capture output using trace
+function __eg_capture() {
+    if [[ $OSTYPE = (darwin)* ]]; then
+        sudo dtrace -p "$1" -qn '
+            syscall::write*:entry
+            /pid == $target && arg0 == 1/ {
+                printf("%s", copyinstr(arg1, arg2));
+            }
+        '
+    elif [[ $OSTYPE = (linux)* ]]; then
+        sudo strace -p"$1" -s9999 -e write
+    fi
+}
+
+alias capture=__eg_capture
+
+if [[ $OSTYPE = (darwin)* ]]; then
+    function __eg_mysql() {
+        if [ -z "$1" ] && [ -z "$EG_MYSQL_OLD_PATH" ]; then
+            echo "You must specify the MySQL version";
+            return;
+        elif [ ! -z "$1" ] && [ ! -d "/usr/local/opt/mysql@${1}" ]; then
+            echo "MySQL version ${1} is not installed";
+            return;
+        fi
+
+        version="$1"
+
+        if [ ! -z "$EG_MYSQL_OLD_PATH" ]; then
+            export PATH="$EG_MYSQL_OLD_PATH"
+            unset EG_MYSQL_OLD_PATH
+        fi
+
+        if [ ! -z "$version" ]; then
+            export EG_MYSQL_OLD_PATH="$PATH"
+            export PATH="/usr/local/opt/mysql@${version}/bin:$PATH"
+        fi
+    }
+
+    alias mysqlenv=__eg_mysql
 fi
 
 ###
@@ -61,60 +108,21 @@ function __es_pssize()
 
 alias pssize=__es_pssize
 
-# Import any local configs
-[ -f ~/.localrc ] && source ~/.localrc
-
 if [ -z "$EDITOR" ] && (( $+commands[vim] )) ; then
     export EDITOR=$(which vim)
 fi
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+# Import any local configs
+[ -f ~/.localrc ] && source ~/.localrc
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+if [ -d "$HOME/.rvm/bin" ]; then
+    export PATH="$PATH:$HOME/.rvm/bin"
+
+    [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+fi
 
 # If zsh, make sure our path is unique
 if [ "$0" = "zsh" ]; then
     export -U PATH="$PATH"
-fi
-
-function __eg_capture() {
-    if [[ $OSTYPE = (darwin)* ]]; then
-        sudo dtrace -p "$1" -qn '
-            syscall::write*:entry
-            /pid == $target && arg0 == 1/ {
-                printf("%s", copyinstr(arg1, arg2));
-            }
-        '
-    elif [[ $OSTYPE = (linux)* ]]; then
-        sudo strace -p"$1" -s9999 -e write
-    fi
-}
-
-alias capture=__eg_capture
-
-if [[ $OSTYPE = (darwin)* ]]; then
-    function __eg_mysql() {
-        if [ -z "$1" ] && [ -z "$EG_MYSQL_OLD_PATH" ]; then
-            echo "You must specify the MySQL version";
-            return;
-        elif [ ! -z "$1" ] && [ ! -d "/usr/local/opt/mysql@${1}" ]; then
-            echo "MySQL version ${1} is not installed";
-            return;
-        fi
-
-        version="$1"
-
-        if [ ! -z "$EG_MYSQL_OLD_PATH" ]; then
-            export PATH="$EG_MYSQL_OLD_PATH"
-            unset EG_MYSQL_OLD_PATH
-        fi
-
-        if [ ! -z "$version" ]; then
-            export EG_MYSQL_OLD_PATH="$PATH"
-            export PATH="/usr/local/opt/mysql@${version}/bin:$PATH"
-        fi
-    }
-
-    alias mysqlenv=__eg_mysql
 fi
