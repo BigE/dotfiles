@@ -1,4 +1,5 @@
 # My custom zshrc using zgen
+
 #zmodload zsh/zprof
 
 zsh_wifi_signal(){
@@ -13,7 +14,7 @@ zsh_wifi_signal(){
 		local color='%F{yellow}'
 		[[ $signal -gt 75 ]] && color='%F{green}'
 		[[ $signal -lt 50 ]] && color='%F{red}'
-		echo -n "%{$color%}$signal%% \uf1eb%{%f%}" # \uf230 is 
+		echo -n "%{$color%}$signal%% \uf1eb%{%f%} " # \uf230 is 
 	fi
 }
 
@@ -25,7 +26,7 @@ POWERLEVEL9K_MODE="nerdfont-complete"
 
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator os_icon context dir dir_writable vcs pyenv rbenv virtualenv)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time_joined background_jobs load ram custom_wifi_signal battery ssh)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time_joined background_jobs load ram battery ssh)
 
 POWERLEVEL9K_CONTEXT_TEMPLATE="%n@%m"
 POWERLEVEL9K_EXECUTION_TIME_ICON="\u23F1"
@@ -95,21 +96,6 @@ source ~/.zgen/zgen.zsh
 # if the init script doesn't exist
 if ! zgen saved; then
 
-	# other plugins
-	zgen load zsh-users/zsh-completions src
-
-	# system packages
-	if [ -d /usr/share/zsh/site-functions ]; then
-		zgen load /usr/share/zsh/site-functions
-	fi
-	
-	# local system packages
-	if [ -d /usr/local/share/zsh/site-functions ]; then
-		zgen load /usr/local/share/zsh/site-functions
-	fi
-	
-	zgen load zsh-users/zsh-syntax-highlighting
-
 	# init oh-my-zsh core
 	zgen oh-my-zsh
 	# pull in plugins from oh-my-zsh
@@ -140,7 +126,7 @@ if ! zgen saved; then
 	fi
 
 	if [[ $OSTYPE = (darwin)* ]]; then
-		zgen oh-my-zsh plugins/osx
+		zgen oh-my-zsh plugins/macos
 
 		if type brew > /dev/null; then
 			zgen oh-my-zsh plugins/brew
@@ -158,6 +144,20 @@ if ! zgen saved; then
 	# theme it up bitches
 	zgen load romkatv/powerlevel10k powerlevel10k
 
+	# other plugins
+	zgen load zsh-users/zsh-completions src
+	zgen load zsh-users/zsh-syntax-highlighting
+
+	# system packages
+	if [ -d /usr/share/zsh/site-functions ]; then
+		zgen load /usr/share/zsh/site-functions
+	fi
+	
+	# local system packages
+	if [ -d /usr/local/share/zsh/site-functions ]; then
+		zgen load /usr/local/share/zsh/site-functions
+	fi
+
 	# speedup startup
 	zgen save
 fi
@@ -169,5 +169,6 @@ fi
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 #zprof
+
 # We done.
 # vim: ft=zsh
