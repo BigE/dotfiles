@@ -41,6 +41,7 @@ function __eg_prompt_command
     EG_DATETIME=$(date "+${EG_DATETIME_FORMAT}")
     EG_LAST_EXIT=""
     EG_PWD=$(pwd)
+    EG_PWD="${EG_PWD/#$HOME/\~}"
 
     case $TERM in
         xterm*|rxvt*|Eterm)
@@ -337,6 +338,3 @@ if [ -f "$HOME/.bashrc_ps1" ]; then
 fi
 
 export PS1
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
