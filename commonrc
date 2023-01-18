@@ -10,7 +10,7 @@ export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen
 
 # On MacOS we want to use the GNU coreutils
 if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
-	export -U PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+	export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 	export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 fi
 
@@ -25,7 +25,7 @@ fi
 
 # Directory coloring
 
-if [[ "$OSTYPE" =~ (darwin|freebsd)* ]]; then
+if [[ "$OSTYPE" =~ ^(darwin|freebsd) ]]; then
 	export CLICOLOR="YES" # Equivalent to passing -G to ls.
 	export LSCOLORS="ExGxFxdaCxDaDahbadacec"
 	# Pulled this from ubuntu, also updated LSCOLORS to match
@@ -74,21 +74,21 @@ fi
 
 # Capture output using trace
 function __eg_capture() {
-	if [[ $OSTYPE =~ (darwin)* ]]; then
+	if [[ $OSTYPE =~ ^(darwin) ]]; then
 		sudo dtrace -p "$1" -qn '
 			syscall::write*:entry
 			/pid == $target && arg0 == 1/ {
 				printf("%s", copyinstr(arg1, arg2));
 			}
 		'
-	elif [[ $OSTYPE =~ (linux)* ]]; then
+	elif [[ $OSTYPE =~ ^(linux) ]]; then
 		sudo strace -p"$1" -s9999 -e write
 	fi
 }
 
 alias capture=__eg_capture
 
-if [[ $OSTYPE =~ (darwin)* ]]; then
+if [[ $OSTYPE =~ ^(darwin) ]]; then
 	function __eg_mysql() {
 		if [ -z "$1" ] && [ -z "$EG_MYSQL_OLD_PATH" ]; then
 			echo "You must specify the MySQL version";
