@@ -108,7 +108,6 @@ if ! zgen saved; then
 	zgen oh-my-zsh plugins/sudo
 	zgen oh-my-zsh plugins/virtualenvwrapper
 	zgen oh-my-zsh plugins/vscode
-	zgen oh-my-zsh plugins/wp-cli
 	zgen oh-my-zsh plugins/yarn
 
 	if [[ $OSTYPE = (linux)* ]]; then
