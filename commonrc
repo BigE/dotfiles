@@ -8,10 +8,23 @@
 
 export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen --RAW-CONTROL-CHARS"
 
-# On MacOS we want to use the GNU coreutils
-if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
-	export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-	export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+# Define the WORKON_HOME for virtualenv
+if [ -z "$WORKON_HOME" ]; then
+	export WORKON_HOME=$HOME/.virtualenvs
+fi
+
+# Define the PROJECT_HOME for virtualenv
+if [ -z "$PROJECT_HOME" ]; then
+	export PROJECT_HOME=$HOME/Projects
+fi
+
+# export pyenv environment
+if [ -z "$PYENV_ROOT" ]; then
+	export PYENV_ROOT="$HOME/.pyenv"
+fi
+
+if [ -z "$EDITOR" ] && (( $+commands[vim] )) ; then
+	export EDITOR=$(which vim)
 fi
 
 # start the powerline daemon
@@ -25,7 +38,7 @@ fi
 
 # Directory coloring
 
-if [[ "$OSTYPE" =~ ^(darwin|freebsd) ]]; then
+if [[ "$OSTYPE" =~ ^(darwin|freebsd|linux-musl) ]]; then
 	export CLICOLOR="YES" # Equivalent to passing -G to ls.
 	export LSCOLORS="ExGxFxdaCxDaDahbadacec"
 	# Pulled this from ubuntu, also updated LSCOLORS to match
@@ -46,31 +59,6 @@ else
 fi
 
 alias rm='rm -i'
-
-# Define the WORKON_HOME for virtualenv
-if [ -z "$WORKON_HOME" ]; then
-	export WORKON_HOME=$HOME/.virtualenvs
-fi
-
-# Define the PROJECT_HOME for virtualenv
-if [ -z "$PROJECT_HOME" ]; then
-	export PROJECT_HOME=$HOME/Projects
-fi
-
-# vendor/bin/ for composer projects - see http://getcomposer.org
-# ~/.local/bin for local stuffs
-export PATH=./vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:$PATH
-
-# export pyenv environment
-if [ -z "$PYENV_ROOT" ]; then
-	export PYENV_ROOT="$HOME/.pyenv"
-fi
-
-# Setup phpenv if it exists
-if [ -d "$HOME/.phpenv/bin" ]; then
-	export PATH="$HOME/.phpenv/bin/:$PATH"
-	eval "$(phpenv init -)"
-fi
 
 # Capture output using trace
 function __eg_capture() {
@@ -138,7 +126,7 @@ function __eg_psgrep()
 # make easier use of the awesomeness
 alias psgrep=__eg_psgrep
 
-function __es_pssize()
+function __eg_pssize()
 {
 	search=${@:$#}
 
@@ -151,22 +139,45 @@ function __es_pssize()
 	"${command[@]}" | awk '{ hr=$1/1024 ; printf("%13.2f Mb ",hr) } { for ( x=2 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
 }
 
-alias pssize=__es_pssize
+alias pssize=__eg_pssize
 
-if [ -z "$EDITOR" ] && (( $+commands[vim] )) ; then
-	export EDITOR=$(which vim)
-fi
+###############################################################################
+# LOCALRC
+###############################################################################
 
-# Import any local configs
+# Import localrc (similar to common)
 [ -f ~/.localrc ] && source ~/.localrc
+
+# If we're bash, import .bashrc_local
+[ -n "$BASH_VERSION" ] && source ~/.bashrc_local
+
+# If we're zsh, import .zshrc_local
+[ -n "$ZSH_VERSION" ] && source ~/.zshrc_local
 
 ###############################################################################
 # PATHS
 ###############################################################################
 
+# On MacOS we want to use the GNU coreutils
+if [ -d /usr/local/opt/coreutils/libexec/gnubin ]; then
+	export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+	export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+fi
+
+# Setup phpenv if it exists
+if [ -d "$HOME/.phpenv/bin" ]; then
+	export PATH="$HOME/.phpenv/bin/:$PATH"
+	eval "$(phpenv init -)"
+fi
+
+# vendor/bin/ for composer projects - see http://getcomposer.org
+# ~/.local/bin for local stuffs
+export PATH=./vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:$PATH
+
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 if [ -d "$HOME/.rvm/bin" ]; then
 	export PATH="$PATH:$HOME/.rvm/bin"
 
-	[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+	# Load RVM into a shell session *as a function*
+	[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 fi
