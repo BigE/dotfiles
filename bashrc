@@ -7,6 +7,11 @@ fi
 # Helpers that will be used throughout this file and to generate the PS1.
 ################################################################################
 
+# This is output before the top prompt
+EG_TITLEBAR=""
+
+EG_PROMPT_SYMBOL="%"
+
 function __eg_command_exists
 {
 	command -v "$1" &> /dev/null
@@ -52,7 +57,7 @@ function __eg_prompt_command
 		;;
 	esac
 
-	local ps1="${USER}@${HOSTNAME} [${EG_PWD}]$(__eg_vcs_ps1_display)$(__eg_virtualenv_ps1_display)$(__eg_datetime_display)[$(__eg_loads)]"
+	local ps1="$EG_TITLEBAR${USER}@${HOSTNAME} [${EG_PWD}]$(__eg_vcs_ps1_display)$(__eg_virtualenv_ps1_display)$(__eg_datetime_display)[$(__eg_loads)]"
 
 	if [ "$EG_LAST_EXIT_CODE" -ne 0 ]; then
 		EG_LAST_EXIT=" ($EG_LAST_EXIT_CODE)"
@@ -78,11 +83,6 @@ function __eg_prompt_command
 
 	local fill="                                                                                                                                                                                                                                                                                                                                                                                                                                  "
 	EG_FILL="${fill:0:${fillsize}}"
-}
-
-function __eg_prompt_symbol
-{
-	echo -ne '%'
 }
 
 function __eg_svn_ps1
@@ -325,7 +325,7 @@ PS1+='$([[ -z $EG_DATETIME ]] || echo -n \[$BOLD$BLUE\][\[$TEAL\]$EG_DATETIME\[$
 PS1+="\[$BOLD$BLUE\][\[$(__eg_fg_color 202)\]\$(__eg_loads)\[$BLUE\]]\[$RESET\]"
 PS1+="\n"
 PS1+='$([[ $EG_LAST_EXIT_CODE -eq 0 ]] || echo -n \[$RED\])' # simply turns the prompt red when last exit was not 0
-PS1+="\$(__eg_prompt_symbol)\[$(tput sgr0)\] "
+PS1+="\${EG_PROMPT_SYMBOL}\[$(tput sgr0)\] "
 
 ################################################################################
 # PROMPT_COMMAND - override this in ~/.bashrc_ps1 also
