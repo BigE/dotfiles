@@ -149,10 +149,10 @@ alias pssize=__eg_pssize
 [ -f ~/.localrc ] && source ~/.localrc
 
 # If we're bash, import .bashrc_local
-[ -n "$BASH_VERSION" ] && source ~/.bashrc_local
+[ -n "$BASH_VERSION" ] && [ -f "~/.bashrc_local" ] && source ~/.bashrc_local
 
 # If we're zsh, import .zshrc_local
-[ -n "$ZSH_VERSION" ] && source ~/.zshrc_local
+[ -n "$ZSH_VERSION" ] && [ -f "~/.zshrc_local" ] && source ~/.zshrc_local
 
 ###############################################################################
 # PATHS
