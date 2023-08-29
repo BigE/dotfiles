@@ -76,8 +76,8 @@
 	excludesfile = ~/.gitignore
 
 # Force SSH with github
-[url "git@github.com:"]
-	insteadOf = "https://github.com/"
+#[url "git@github.com:"]
+#	insteadOf = "https://github.com/"
 # Include local config to override
 [include]
 	path = ~/.gitconfig.local
