@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # My custom zshrc using zgen
 
 #zmodload zsh/zprof
@@ -19,20 +26,20 @@ zsh_wifi_signal(){
 }
 
 # Generic settings
-POWERLEVEL9K_CUSTOM_WIFI_SIGNAL_BACKGROUND="black"
-POWERLEVEL9K_CUSTOM_WIFI_SIGNAL="zsh_wifi_signal"
+#POWERLEVEL9K_CUSTOM_WIFI_SIGNAL_BACKGROUND="black"
+#POWERLEVEL9K_CUSTOM_WIFI_SIGNAL="zsh_wifi_signal"
 
-POWERLEVEL9K_MODE="nerdfont-complete"
+#POWERLEVEL9K_MODE="nerdfont-complete"
 
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator os_icon context dir dir_writable vcs pyenv rbenv virtualenv)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time_joined background_jobs load ram battery ssh)
+#POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator os_icon context dir dir_writable vcs pyenv rbenv virtualenv)
+#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time_joined background_jobs load ram battery ssh)
 
-POWERLEVEL9K_CONTEXT_TEMPLATE="%n@%m"
-POWERLEVEL9K_EXECUTION_TIME_ICON="\u23F1"
-POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="\u256D""\u2500"
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="\u2570""\uF460 "
-POWERLEVEL9K_TIME_FORMAT="%D{\uF017 %T}"
+#POWERLEVEL9K_CONTEXT_TEMPLATE="%n@%m"
+#POWERLEVEL9K_EXECUTION_TIME_ICON="\u23F1"
+#POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="\u256D""\u2500"
+#POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="\u2570""\uF460 "
+#POWERLEVEL9K_TIME_FORMAT="%D{\uF017 %T}"
 
 ZSH_TMUX_ITERM2=false
 if [ ! -z $ITERM_SESSION_ID ]; then
@@ -171,3 +178,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # We done.
 # vim: ft=zsh
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
