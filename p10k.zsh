@@ -368,9 +368,38 @@
   # Branch icon. Set this parameter to '\UE0A0 ' for the popular Powerline branch icon.
   typeset -g POWERLEVEL9K_VCS_BRANCH_ICON='\uF126 '
 
+  # Commits ahead icon.
+  typeset -g POWERLEVEL9K_VCS_COMMITS_AHEAD_ICON='⇡'
+  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_COMMITS_AHEAD_ICON='\uf0aa '
+
+  # Commits behind icon.
+  typeset -g POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON='⇣'
+  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON='\uf0ab '
+
+  # Push commits ahead icon.
+  typeset -g POWERLEVEL9K_VCS_PUSH_COMMITS_AHEAD='⇢'
+  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_PUSH_COMMITS_AHEAD_ICON='\uf0a9 '
+
+  # Push commits behind icon.
+  typeset -g POWERLEVEL9K_VCS_PUSH_COMMITS_BEHIND='⇠'
+  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON='\uf0a8 '
+
+  # Staged icon.
+  typeset -g POWERLEVEL9K_VCS_STAGED_ICON='+'
+  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_STAGED_ICON='\uf055 '
+
+  # Stashes icon.
+  typeset -g POWERLEVEL9K_VCS_STASHES_ICON='*'
+  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_STASHES_ICON='\uf01c '
+
+  # Unstaged icon.
+  typeset -g POWERLEVEL9K_VCS_UNSTAGED_ICON='!'
+  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_UNSTAGED_ICON='\uf06a '
+
   # Untracked files icon. It's really a question mark, your font isn't broken.
   # Change the value of this parameter to show a different icon.
   typeset -g POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
+  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_UNTRACKED_ICON='\uf059 '
 
   # Formatter for Git status.
   #
@@ -438,30 +467,30 @@
 
     if (( VCS_STATUS_COMMITS_AHEAD || VCS_STATUS_COMMITS_BEHIND )); then
       # ⇣42 if behind the remote.
-      (( VCS_STATUS_COMMITS_BEHIND )) && res+=" ${clean}⇣${VCS_STATUS_COMMITS_BEHIND}"
+      (( VCS_STATUS_COMMITS_BEHIND )) && res+=" ${clean}${(g::)POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON}${VCS_STATUS_COMMITS_BEHIND}"
       # ⇡42 if ahead of the remote; no leading space if also behind the remote: ⇣42⇡42.
       (( VCS_STATUS_COMMITS_AHEAD && !VCS_STATUS_COMMITS_BEHIND )) && res+=" "
-      (( VCS_STATUS_COMMITS_AHEAD  )) && res+="${clean}⇡${VCS_STATUS_COMMITS_AHEAD}"
+      (( VCS_STATUS_COMMITS_AHEAD  )) && res+="${clean}${(g::)POWERLEVEL9K_VCS_COMMITS_AHEAD_ICON}${VCS_STATUS_COMMITS_AHEAD}"
     elif [[ -n $VCS_STATUS_REMOTE_BRANCH ]]; then
       # Tip: Uncomment the next line to display '=' if up to date with the remote.
       # res+=" ${clean}="
     fi
 
     # ⇠42 if behind the push remote.
-    (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}⇠${VCS_STATUS_PUSH_COMMITS_BEHIND}"
+    (( VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" ${clean}${(g::)POWERLEVEL9K_VCS_PUSH_COMMITS_BEHIND}${VCS_STATUS_PUSH_COMMITS_BEHIND}"
     (( VCS_STATUS_PUSH_COMMITS_AHEAD && !VCS_STATUS_PUSH_COMMITS_BEHIND )) && res+=" "
     # ⇢42 if ahead of the push remote; no leading space if also behind: ⇠42⇢42.
-    (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${clean}⇢${VCS_STATUS_PUSH_COMMITS_AHEAD}"
+    (( VCS_STATUS_PUSH_COMMITS_AHEAD  )) && res+="${clean}${(g::)POWERLEVEL9K_VCS_PUSH_COMMITS_AHEAD}${VCS_STATUS_PUSH_COMMITS_AHEAD}"
     # *42 if have stashes.
-    (( VCS_STATUS_STASHES        )) && res+=" ${clean}*${VCS_STATUS_STASHES}"
+    (( VCS_STATUS_STASHES        )) && res+=" ${clean}${(g::)POWERLEVEL9K_VCS_STASHES_ICON}${VCS_STATUS_STASHES}"
     # 'merge' if the repo is in an unusual state.
     [[ -n $VCS_STATUS_ACTION     ]] && res+=" ${conflicted}${VCS_STATUS_ACTION}"
     # ~42 if have merge conflicts.
     (( VCS_STATUS_NUM_CONFLICTED )) && res+=" ${conflicted}~${VCS_STATUS_NUM_CONFLICTED}"
     # +42 if have staged changes.
-    (( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}+${VCS_STATUS_NUM_STAGED}"
+    (( VCS_STATUS_NUM_STAGED     )) && res+=" ${modified}${(g::)POWERLEVEL9K_VCS_STAGED_ICON}${VCS_STATUS_NUM_STAGED}"
     # !42 if have unstaged changes.
-    (( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}!${VCS_STATUS_NUM_UNSTAGED}"
+    (( VCS_STATUS_NUM_UNSTAGED   )) && res+=" ${modified}${(g::)POWERLEVEL9K_VCS_UNSTAGED_ICON}${VCS_STATUS_NUM_UNSTAGED}"
     # ?42 if have untracked files. It's really a question mark, your font isn't broken.
     # See POWERLEVEL9K_VCS_UNTRACKED_ICON above if you want to use a different icon.
     # Remove the next line if you don't want to see untracked files at all.
