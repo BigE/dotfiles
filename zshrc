@@ -1,3 +1,5 @@
+# My custom zshrc using zgen
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -5,41 +7,10 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# My custom zshrc using zgen
-
+# Uncomment this for profiling
 #zmodload zsh/zprof
 
-zsh_wifi_signal(){
-	local signal=""
-	if which nmcli &> /dev/null; then
-		signal=$(nmcli device wifi | grep yes | awk '{print $8}')
-	elif [[ $OSTYPE = (darwin)* ]]; then
-		signal=$(echo "2*($(/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | grep CtlRSSI | awk '{print $2}') + 100)" | bc)
-	fi
-
-	if [[ ! -z "$signal" ]]; then
-		local color='%F{yellow}'
-		[[ $signal -gt 75 ]] && color='%F{green}'
-		[[ $signal -lt 50 ]] && color='%F{red}'
-		echo -n "%{$color%}$signal%% \uf1eb%{%f%} " # \uf230 is 
-	fi
-}
-
-# Generic settings
-#POWERLEVEL9K_CUSTOM_WIFI_SIGNAL_BACKGROUND="black"
-#POWERLEVEL9K_CUSTOM_WIFI_SIGNAL="zsh_wifi_signal"
-
-#POWERLEVEL9K_MODE="nerdfont-complete"
-
-#POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator os_icon context dir dir_writable vcs pyenv rbenv virtualenv)
-#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status command_execution_time_joined background_jobs load ram battery ssh)
-
-#POWERLEVEL9K_CONTEXT_TEMPLATE="%n@%m"
-#POWERLEVEL9K_EXECUTION_TIME_ICON="\u23F1"
-#POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="\u256D""\u2500"
-#POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="\u2570""\uF460 "
-#POWERLEVEL9K_TIME_FORMAT="%D{\uF017 %T}"
+# Theme settings (powerlevel10k) are now in the p10k.zsh file
 
 ZSH_TMUX_ITERM2=false
 if [ ! -z $ITERM_SESSION_ID ]; then
