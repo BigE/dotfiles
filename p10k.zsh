@@ -393,6 +393,10 @@
   typeset -g POWERLEVEL9K_VCS_STASHES_ICON='*'
   [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_STASHES_ICON='\uf01c '
 
+  # Tag icon.
+  typeset -g POWERLEVEL9K_VCS_TAG_ICON='#'
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_TAG_ICON=' \uf02b'
+
   # Unstaged icon.
   typeset -g POWERLEVEL9K_VCS_UNSTAGED_ICON='!'
   [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_UNSTAGED_ICON='\uf06a '
@@ -441,14 +445,14 @@
     if [[ -n $VCS_STATUS_TAG
           # Show tag only if not on a branch.
           # Tip: To always show tag, delete the next line.
-          && -z $VCS_STATUS_LOCAL_BRANCH  # <-- this line
+          #&& -z $VCS_STATUS_LOCAL_BRANCH  # <-- this line
         ]]; then
       local tag=${(V)VCS_STATUS_TAG}
       # If tag name is at most 32 characters long, show it in full.
       # Otherwise show the first 12 … the last 12.
       # Tip: To always show tag name in full without truncation, delete the next line.
       (( $#tag > 32 )) && tag[13,-13]="…"  # <-- this line
-      res+="${meta}#${clean}${tag//\%/%%}"
+      res+="${meta}${(g::)POWERLEVEL9K_VCS_TAG_ICON}${clean}${tag//\%/%%}"
     fi
 
     # Display the current Git commit if there is no branch and no tag.
