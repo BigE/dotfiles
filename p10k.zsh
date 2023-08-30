@@ -33,7 +33,8 @@
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
     os_icon                 # os identifier
-    context                 # user@hostname
+    SSH                     # ssh session
+    context_joined          # user@hostname
     dir                     # current directory
     vcs                     # git status
     # =========================[ Line #2 ]=========================
