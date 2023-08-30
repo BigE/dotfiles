@@ -149,10 +149,10 @@ alias pssize=__eg_pssize
 [ -f ~/.localrc ] && source ~/.localrc
 
 # If we're bash, import .bashrc_local
-[ -n "$BASH_VERSION" ] && [ -f "~/.bashrc_local" ] && source ~/.bashrc_local
+[ -n "$BASH_VERSION" ] && [ -f ~/.bashrc_local ] && source ~/.bashrc_local
 
 # If we're zsh, import .zshrc_local
-[ -n "$ZSH_VERSION" ] && [ -f "~/.zshrc_local" ] && source ~/.zshrc_local
+[ -n "$ZSH_VERSION" ] && [ -f ~/.zshrc_local ] && source ~/.zshrc_local
 
 ###############################################################################
 # PATHS
@@ -173,11 +173,3 @@ fi
 # vendor/bin/ for composer projects - see http://getcomposer.org
 # ~/.local/bin for local stuffs
 export PATH=./vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:$PATH
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-if [ -d "$HOME/.rvm/bin" ]; then
-	export PATH="$PATH:$HOME/.rvm/bin"
-
-	# Load RVM into a shell session *as a function*
-	[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-fi

@@ -21,6 +21,7 @@ ln -sf $DIR/cprofile $HOME/.cprofile
 ln -sf $DIR/gitconfig $HOME/.gitconfig
 ln -sf $DIR/gitignore $HOME/.gitignore
 ln -sf $DIR/gvimrc $HOME/.gvimrc
+ln -sf $DIR/p10k.zsh $HOME/.p10k.zsh
 ln -sf $DIR/profile $HOME/.profile
 if [ ! -L $HOME/.vim ]; then
     ln -sf $DIR/vim $HOME/.vim
