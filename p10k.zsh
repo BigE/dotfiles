@@ -370,36 +370,36 @@
 
   # Commits ahead icon.
   typeset -g POWERLEVEL9K_VCS_COMMITS_AHEAD_ICON='⇡'
-  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_COMMITS_AHEAD_ICON='\uf0aa '
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_COMMITS_AHEAD_ICON='\uf0aa '
 
   # Commits behind icon.
   typeset -g POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON='⇣'
-  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON='\uf0ab '
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON='\uf0ab '
 
   # Push commits ahead icon.
   typeset -g POWERLEVEL9K_VCS_PUSH_COMMITS_AHEAD='⇢'
-  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_PUSH_COMMITS_AHEAD_ICON='\uf0a9 '
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_PUSH_COMMITS_AHEAD_ICON='\uf0a9 '
 
   # Push commits behind icon.
   typeset -g POWERLEVEL9K_VCS_PUSH_COMMITS_BEHIND='⇠'
-  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON='\uf0a8 '
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON='\uf0a8 '
 
   # Staged icon.
   typeset -g POWERLEVEL9K_VCS_STAGED_ICON='+'
-  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_STAGED_ICON='\uf055 '
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_STAGED_ICON='\uf055 '
 
   # Stashes icon.
   typeset -g POWERLEVEL9K_VCS_STASHES_ICON='*'
-  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_STASHES_ICON='\uf01c '
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_STASHES_ICON='\uf01c '
 
   # Unstaged icon.
   typeset -g POWERLEVEL9K_VCS_UNSTAGED_ICON='!'
-  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_UNSTAGED_ICON='\uf06a '
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_UNSTAGED_ICON='\uf06a '
 
   # Untracked files icon. It's really a question mark, your font isn't broken.
   # Change the value of this parameter to show a different icon.
   typeset -g POWERLEVEL9K_VCS_UNTRACKED_ICON='?'
-  (( $POWERLEVEL9K_MODE == "nerdfont-complete" )) && POWERLEVEL9K_VCS_UNTRACKED_ICON='\uf059 '
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_UNTRACKED_ICON='\uf059 '
 
   # Formatter for Git status.
   #
