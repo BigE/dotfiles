@@ -39,7 +39,7 @@
     vcs                     # git status
     # =========================[ Line #2 ]=========================
     newline                 # \n
-    prompt_char           # prompt symbol
+    prompt_char             # prompt symbol
   )
 
   # The list of segments shown on the right. Fill it with less important segments.
@@ -144,7 +144,7 @@
   # as POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND below.
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='%244F╭─'
   typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX='%244F├─'
-  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%244F╰─'
+  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%244F╰'
   # Connect right prompt lines with these symbols.
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_SUFFIX=
   typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_SUFFIX=
@@ -369,6 +369,10 @@
   # Branch icon. Set this parameter to '\UE0A0 ' for the popular Powerline branch icon.
   typeset -g POWERLEVEL9K_VCS_BRANCH_ICON='\uF126 '
 
+  # Commit icon.
+  typeset -g POWERLEVEL9K_VCS_COMMIT_ICON='@'
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_COMMIT_ICON='\uE729'
+
   # Commits ahead icon.
   typeset -g POWERLEVEL9K_VCS_COMMITS_AHEAD_ICON='⇡'
   [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_COMMITS_AHEAD_ICON='\uf0aa '
@@ -383,7 +387,11 @@
 
   # Push commits behind icon.
   typeset -g POWERLEVEL9K_VCS_PUSH_COMMITS_BEHIND='⇠'
-  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_COMMITS_BEHIND_ICON='\uf0a8 '
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_PUSH_COMMITS_BEHIND_ICON='\uf0a8 '
+
+  # Remote branch icon.
+  typeset -g POWERLEVEL9K_VCS_REMOTE_BRANCH_ICON=':'
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_REMOTE_BRANCH_ICON='\uE728'
 
   # Staged icon.
   typeset -g POWERLEVEL9K_VCS_STAGED_ICON='+'
@@ -392,6 +400,10 @@
   # Stashes icon.
   typeset -g POWERLEVEL9K_VCS_STASHES_ICON='*'
   [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_STASHES_ICON='\uf01c '
+
+  # Tag icon.
+  typeset -g POWERLEVEL9K_VCS_TAG_ICON='#'
+  [[ $POWERLEVEL9K_MODE = "nerdfont-complete" ]] && POWERLEVEL9K_VCS_TAG_ICON=' \uf02b'
 
   # Unstaged icon.
   typeset -g POWERLEVEL9K_VCS_UNSTAGED_ICON='!'
@@ -441,24 +453,24 @@
     if [[ -n $VCS_STATUS_TAG
           # Show tag only if not on a branch.
           # Tip: To always show tag, delete the next line.
-          && -z $VCS_STATUS_LOCAL_BRANCH  # <-- this line
+          #&& -z $VCS_STATUS_LOCAL_BRANCH  # <-- this line
         ]]; then
       local tag=${(V)VCS_STATUS_TAG}
       # If tag name is at most 32 characters long, show it in full.
       # Otherwise show the first 12 … the last 12.
       # Tip: To always show tag name in full without truncation, delete the next line.
       (( $#tag > 32 )) && tag[13,-13]="…"  # <-- this line
-      res+="${meta}#${clean}${tag//\%/%%}"
+      res+="${meta}${(g::)POWERLEVEL9K_VCS_TAG_ICON}${clean}${tag//\%/%%}"
     fi
 
     # Display the current Git commit if there is no branch and no tag.
     # Tip: To always display the current Git commit, delete the next line.
     [[ -z $VCS_STATUS_LOCAL_BRANCH && -z $VCS_STATUS_TAG ]] &&  # <-- this line
-      res+="${meta}@${clean}${VCS_STATUS_COMMIT[1,8]}"
+      res+="${meta}${(g::)POWERLEVEL9K_VCS_COMMIT_ICON}${clean}${VCS_STATUS_COMMIT[1,8]}"
 
     # Show tracking branch name if it differs from local branch.
     if [[ -n ${VCS_STATUS_REMOTE_BRANCH:#$VCS_STATUS_LOCAL_BRANCH} ]]; then
-      res+="${meta}:${clean}${(V)VCS_STATUS_REMOTE_BRANCH//\%/%%}"
+      res+="${meta}${(g::)POWERLEVEL9K_VCS_REMOTE_BRANCH_ICON}${clean}${(V)VCS_STATUS_REMOTE_BRANCH//\%/%%}"
     fi
 
     # Display "wip" if the latest commit's summary contains "wip" or "WIP".
