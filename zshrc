@@ -1,14 +1,14 @@
 # My custom zshrc using zgen
 
+# Uncomment this for profiling
+#zmodload zsh/zprof
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-# Uncomment this for profiling
-#zmodload zsh/zprof
 
 ZSH_TMUX_ITERM2=false
 if [ ! -z $ITERM_SESSION_ID ]; then
@@ -45,6 +45,9 @@ setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
 
 # Include the common things before we load it all up
 [ -f ~/.commonrc ] && source ~/.commonrc
+
+# if we're using an M1 chip and homebrew exists, load it up with priority in the path.
+type arch > /dev/null && [[ $(arch) = "arm64" ]] && [ -d /opt/homebrew ] && export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
 if [ -z "$HISTFILE" ]; then
 	export HISTFILE="$HOME/.zsh_history"
@@ -145,6 +148,7 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # vi mode
 bindkey -v
+bindkey "^R" history-incremental-search-backward
 
 # Theme settings (powerlevel10k) are now in the p10k.zsh file
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
