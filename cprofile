@@ -1,5 +1,14 @@
 # Common profile things that can be done between bash/zsh
 
+# Homebrew
+if [[ $OSTYPE = (darwin)* ]]; then
+    if [[ $(arch) = "arm64" ]]; then
+        [ -d /opt/homebrew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+    else
+        [ -f /usr/local/bin/brew ] && eval "$(/usr/local/bin/brew shellenv)"
+    fi
+fi
+
 # Load RVM into a shell session *as a function*
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" 
 
