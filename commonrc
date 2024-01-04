@@ -159,9 +159,21 @@ alias pssize=__eg_pssize
 ###############################################################################
 
 # On MacOS we want to use the GNU coreutils
-if [ -d "$(brew --prefix coreutils)" ]; then
+if [[ -n $HOMEBREW_PREFIX ]] && [ -d "$(brew --prefix coreutils)" ]; then
 	export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
 	export MANPATH="$(brew --prefix coreutils)/libexec/gnuman:$MANPATH"
+fi
+
+# On MacOS we want to use the GNU find
+if [[ -n $HOMEBREW_PREFIX ]] && [ -d "$(brew --prefix findutils)" ]; then
+    export PATH="$(brew --prefix findutils)/libexec/gnubin:$PATH"
+    export MANPATH="$(brew --prefix findutils)/libexec/gnuman:$MANPATH"
+fi
+
+# On MacOS we want to use the GNU sed
+if [[ -n $HOMEBREW_PREFIX ]] && [ -d "$(brew --prefix gnu-sed)" ]; then
+    export PATH="$(brew --prefix gnu-sed)/libexec/gnubin:$PATH"
+    export MANPATH="$(brew --prefix gnu-sed)/libexec/gnuman:$MANPATH"
 fi
 
 # Setup phpenv if it exists
