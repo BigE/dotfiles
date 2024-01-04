@@ -170,10 +170,22 @@ if [[ -n $HOMEBREW_PREFIX ]] && [ -d "$(brew --prefix findutils)" ]; then
     export MANPATH="$(brew --prefix findutils)/libexec/gnuman:$MANPATH"
 fi
 
+# On MacOS we want to use the GNU awk
+if [[ -n $HOMEBREW_PREFIX ]] && [ -d "$(brew --prefix gawk)" ]; then
+    export PATH="$(brew --prefix gawk)/libexec/gnubin:$PATH"
+    export MANPATH="$(brew --prefix gawk)/libexec/gnuman:$MANPATH"
+fi
+
 # On MacOS we want to use the GNU sed
 if [[ -n $HOMEBREW_PREFIX ]] && [ -d "$(brew --prefix gnu-sed)" ]; then
     export PATH="$(brew --prefix gnu-sed)/libexec/gnubin:$PATH"
     export MANPATH="$(brew --prefix gnu-sed)/libexec/gnuman:$MANPATH"
+fi
+
+# On MacOS we want to use the GNU tar
+if [[ -n $HOMEBREW_PREFIX ]] && [ -d "$(brew --prefix gnu-tar)" ]; then
+    export PATH="$(brew --prefix gnu-tar)/libexec/gnubin:$PATH"
+    export MANPATH="$(brew --prefix gnu-tar)/libexec/gnuman:$MANPATH"
 fi
 
 # Setup phpenv if it exists
