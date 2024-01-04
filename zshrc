@@ -46,8 +46,11 @@ setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
 # Include the common things before we load it all up
 [ -f ~/.commonrc ] && source ~/.commonrc
 
-# if we're using an M1 chip and homebrew exists, load it up with priority in the path.
-type arch > /dev/null && [[ $(arch) = "arm64" ]] && [ -d /opt/homebrew ] && export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
+$(type brew > /dev/null) && [ $? -eq 0 ] && export HOMEBREW_PREFIX=$(brew --prefix)
+
+if [ ! -z $HOMEBREW_PREFIX ]; then
+    export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
+fi
 
 if [ -z "$HISTFILE" ]; then
 	export HISTFILE="$HOME/.zsh_history"
