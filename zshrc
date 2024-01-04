@@ -43,10 +43,10 @@ setopt hist_ignore_all_dups     # Remember only one unique copy of the command.
 setopt hist_reduce_blanks       # Remove superfluous blanks.
 setopt hist_save_no_dups        # Omit older commands in favor of newer ones. 
 
+$(type brew > /dev/null) && [ $? -eq 0 ] && export HOMEBREW_PREFIX=$(brew --prefix)
+
 # Include the common things before we load it all up
 [ -f ~/.commonrc ] && source ~/.commonrc
-
-$(type brew > /dev/null) && [ $? -eq 0 ] && export HOMEBREW_PREFIX=$(brew --prefix)
 
 if [ ! -z $HOMEBREW_PREFIX ]; then
     export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
@@ -120,7 +120,7 @@ if ! zgen saved; then
 
 	zgen oh-my-zsh plugins/pyenv
 	zgen oh-my-zsh plugins/nvm
-	zgen oh-my-zsh plugins/rvm
+	zgen oh-my-zsh plugins/rbenv
 
 	# theme it up bitches
 	zgen load romkatv/powerlevel10k powerlevel10k
