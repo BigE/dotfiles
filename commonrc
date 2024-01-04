@@ -173,3 +173,5 @@ fi
 # vendor/bin/ for composer projects - see http://getcomposer.org
 # ~/.local/bin for local stuffs
 export PATH=./vendor/bin:$HOME/.composer/vendor/bin:$HOME/.local/bin:$PATH
+
+# vim: ft=sh

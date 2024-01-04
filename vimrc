@@ -73,3 +73,5 @@ let g:syntastic_check_on_wq = 0
 if !empty(glob("~/.vimrc_local"))
 	source ~/.vimrc_local
 endif
+
+" vim: ff=vim

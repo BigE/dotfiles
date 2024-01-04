@@ -23,3 +23,5 @@ if [ -z "$PYENV_ROOT" ] && [ -d "$HOME/.pyenv" ]; then
         export ZSH_PYENV_QUIET=true
     fi
 fi
+
+# vim: ft=sh

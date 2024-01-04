@@ -338,3 +338,5 @@ if [ -f "$HOME/.bashrc_ps1" ]; then
 fi
 
 export PS1
+
+# vim: ft=bash
