@@ -1,5 +1,7 @@
+#!/bin/bash
+
 # Do BASH specific things here
 
-[ -f ~/.cprofile ] && source ~/.cprofile # load common profile settings
+[ -f "${HOME}/.cprofile" ] && source "${HOME}/.cprofile" # load common profile settings
 
 # vim: ft=bash
