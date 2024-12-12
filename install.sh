@@ -19,6 +19,7 @@ ln -sf $DIR/bashrc $HOME/.bashrc
 ln -sf $DIR/commonrc $HOME/.commonrc
 ln -sf $DIR/powerline $HOME/.config/powerline
 ln -sf $DIR/cprofile $HOME/.cprofile
+ln -sf $DIR/env $HOME/.env
 ln -sf $DIR/gitconfig $HOME/.gitconfig
 ln -sf $DIR/gitignore $HOME/.gitignore
 ln -sf $DIR/gvimrc $HOME/.gvimrc
@@ -29,5 +30,6 @@ if [ ! -L $HOME/.vim ]; then
 fi
 ln -sf $DIR/tmux.conf $HOME/.tmux.conf
 ln -sf $DIR/vimrc $HOME/.vimrc
+ln -sf $DIR/zshenv $HOME/.zshenv
 ln -sf $DIR/zprofile $HOME/.zprofile
 ln -sf $DIR/zshrc $HOME/.zshrc
