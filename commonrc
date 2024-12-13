@@ -17,7 +17,7 @@ export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen
 # Directory coloring
 
  case "$OSTYPE" in
-	darwin*|linux*)
+	darwin*|freebsd*|linux-musl*)
 		export CLICOLOR="YES" # Equivalent to passing -G to ls.
 		export LSCOLORS="ExGxFxdaCxDaDahbadacec"
 		# Pulled this from ubuntu, also updated LSCOLORS to match
