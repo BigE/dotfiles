@@ -35,7 +35,7 @@ export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen
 	;;
 esac
 
-alias rm='rm -i'
+alias rm='rm -i' # use -i by default for confirmation
 
 # Capture output using trace
 __eg_capture() {

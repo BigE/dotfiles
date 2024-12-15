@@ -219,16 +219,6 @@ fi
 # Disable the virtual environment prompt, I prefer my own
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-# if not already set, virtualenvs should reside here
-if [ -z "$WORKON_HOME" ]; then
-	export WORKON_HOME=$HOME/.virtualenvs
-fi
-
-# This is where I like to keep my projects
-if [ -z "$PROJECT_HOME" ]; then
-	export PROJECT_HOME=$HOME/Projects
-fi
-
 # My editor
 if __eg_command_exists vim
 then
@@ -267,16 +257,9 @@ export SVN_SHOWDIRTYSTATE=
 # alias setup - these linux specific, feel free to override in .bashrc_local
 ################################################################################
 
-if [[ $OSTYPE == "darwin"* ]]; then
-	alias ls="ls -hG"
-else
-	alias ls="ls -h --color=auto"
-fi
-
 alias grep="grep --color"
 alias ll="ls -l"
 alias la="ls -a"
-alias rm="rm -i" # use -i by default to make sure we want to delete it
 
 ################################################################################
 # I almost felt like these were clutter... almost.

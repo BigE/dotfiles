@@ -5,4 +5,6 @@
 
 [ -f "${HOME}/.cprofile" ] && source "${HOME}/.cprofile" # load common profile settings
 
+[ -f "${HOME}/.bashrc" ] && source "${HOME}/.bashrc"
+
 # vim: ft=bash
