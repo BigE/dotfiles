@@ -22,6 +22,9 @@ fi
 # CONFIGURATION
 ###############################################################################
 
+# control ls colors
+[ -z "$EG_DISABLE_LS_COLORS" ] && EG_DISABLE_LS_COLORS=1
+
 # enable vi mode
 [ -z "$EG_VI_MODE" ] && EG_VI_MODE=1
 
@@ -64,27 +67,28 @@ if [ -z "${ZSH_HIGHLIGHT_STYLES}" ]; then
 	ZSH_HIGHLIGHT_STYLES[hashed-command]='fg=green,bold'
 fi
 
-# let oh-my-zsh know we want to do our own thing
-DISABLE_LS_COLORS=true
-zstyle ":completion:*:default" list-colors ${(s.:.)LS_COLORS}
-
-###############################################################################
-# OPTIONS
-###############################################################################
-
-setopt autocd                   # Allow changing directories without `cd`
-setopt append_history           # Dont overwrite history
-setopt extended_history         # Also record time and duration of commands.
-setopt share_history            # Share history between multiple shells
-setopt hist_expire_dups_first   # Clear duplicates when trimming internal hist.
-setopt hist_find_no_dups        # Dont display duplicates during searches.
-setopt hist_ignore_dups         # Ignore consecutive duplicates.
-setopt hist_ignore_all_dups     # Remember only one unique copy of the command.
-setopt hist_reduce_blanks       # Remove superfluous blanks.
-setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
+# define default options to set
+[ -z "$EG_ZSH_OPTIONS" ] && EG_ZSH_OPTIONS=(
+	autocd                   # Allow changing directories without `cd`
+	append_history           # Dont overwrite history
+	extended_history         # Also record time and duration of commands.
+	share_history            # Share history between multiple shells
+	hist_expire_dups_first   # Clear duplicates when trimming internal hist.
+	hist_find_no_dups        # Dont display duplicates during searches.
+	hist_ignore_dups         # Ignore consecutive duplicates.
+	hist_ignore_all_dups     # Remember only one unique copy of the command.
+	hist_reduce_blanks       # Remove superfluous blanks.
+	hist_save_no_dups        # Omit older commands in favor of newer ones.
+)
 
 # Load the .commonrc file, which will load the .localrc file
 [ -f "$HOME/.commonrc" ] && source "$HOME/.commonrc"
+
+# let oh-my-zsh know we want to do our own thing
+if [ "$EG_DISABLE_LS_COLORS" -eq 1 ]; then
+	DISABLE_LS_COLORS=true
+	zstyle ":completion:*:default" list-colors ${(s.:.)LS_COLORS}
+fi
 
 # Now finalize configuration by ensuring specific variables are set
 
@@ -93,6 +97,14 @@ setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
 
 # history items in history file
 [ -z "$SAVEHIST" ] && export SAVEHIST="10000"
+
+###############################################################################
+# OPTIONS
+###############################################################################
+
+for OPTION in "${EG_ZSH_OPTIONS[@]}"; do
+	setopt "${OPTION}"
+done
 
 ###############################################################################
 # INITALIZATION
