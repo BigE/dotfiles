@@ -15,6 +15,7 @@ if [ -d $HOME/.vim ]; then
     mv -f $HOME/.vim $HOME/.vim.bak
 fi
 
+ln -sf $DIR/bash_profile $HOME/.bash_profile
 ln -sf $DIR/bashrc $HOME/.bashrc
 ln -sf $DIR/commonrc $HOME/.commonrc
 ln -sf $DIR/powerline $HOME/.config/powerline
@@ -24,7 +25,6 @@ ln -sf $DIR/gitconfig $HOME/.gitconfig
 ln -sf $DIR/gitignore $HOME/.gitignore
 ln -sf $DIR/gvimrc $HOME/.gvimrc
 ln -sf $DIR/p10k.zsh $HOME/.p10k.zsh
-ln -sf $DIR/profile $HOME/.profile
 if [ ! -L $HOME/.vim ]; then
     ln -sf $DIR/vim $HOME/.vim
 fi
