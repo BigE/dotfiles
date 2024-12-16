@@ -86,16 +86,22 @@ fi
 ##
 __eg_psgrep()
 {
-	search=${@:$#}
+	for search in "$@"; do
+		:
+	done
 
 	if [ "$#" -eq 1 ]
 	then
-		ps aux | head -n1; ps aux | grep -v grep | grep --color=always $search
+		ps aux | head -n1; ps aux | grep -v grep | grep --color=always "${search-}"
 	else
-		# keep the space here for zsh
-		# https://stackoverflow.com/questions/1215538/extract-parameters-before-last-parameter-in#comment112570591_1215592
-		args=${@:1:$# -1}
-		echo "${args}" | xargs ps | head -n1; echo "${args}" | xargs ps | grep -v grep | grep --color=always $search
+		args=""
+		for arg  in "$@"; do
+			if [ "$arg" != "${search-}" ]; then
+				args="$args $arg"
+			fi
+		done
+
+		echo "${args}" | xargs ps | head -n1; echo "${args}" | xargs ps | grep -v grep | grep --color=always "${search-}"
 	fi
 
 }
@@ -103,20 +109,25 @@ __eg_psgrep()
 # make easier use of the awesomeness
 alias psgrep=__eg_psgrep
 
-__eg_pssize()
-{
-	search=${@:$#}
+if expr "$OSTYPE" : "linux"; then
+	# Unfortunately, OSX doesn't provide a ps version that uses size
+	__eg_pssize()
+	{
+		for search in "$@"; do
+			:
+		done
 
-	if [ "$#" -eq 1 ]; then
-		command=(__eg_psgrep -eo size,pid,user,command --sort -size $search)
-	else
-		command=(ps -eo size,pid,user,command --sort -size)
-	fi
+		if [ "$#" -eq 1 ]; then
+			command="__eg_psgrep -eo size,pid,user,command --sort -size ${search-}"
+		else
+			command="ps -eo size,pid,user,command --sort -size"
+		fi
 
-	"${command[@]}" | awk '{ hr=$1/1024 ; printf("%13.2f Mb ",hr) } { for ( x=2 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
-}
+		eval "$command" | awk '{ hr=$1/1024 ; printf("%13.2f Mb ",hr) } { for ( x=2 ; x<=NF ; x++ ) { printf("%s ",$x) } print "" }'
+	}
 
-alias pssize=__eg_pssize
+	alias pssize=__eg_pssize
+fi
 
 ###############################################################################
 # LOCALRC
@@ -179,8 +190,9 @@ fi
 
 if [ -z "$PHPENV_ROOT" ] && [ -d "${HOME}/.phpenv" ]; then
 	export PHPENV_ROOT="${HOME}/.phpenv"
-	export PATH="${PHPENV_ROOT}/bin:${PATH}"
-elif [ -n "$PHPENV_ROOT" ]; then
+fi
+
+if [ -n "$PHPENV_ROOT" ]; then
 	export PATH="${PHPENV_ROOT}/bin:${PATH}"
 fi
 
