@@ -109,7 +109,7 @@ __eg_psgrep()
 # make easier use of the awesomeness
 alias psgrep=__eg_psgrep
 
-if expr "$OSTYPE" : "linux"; then
+if expr "$OSTYPE" : 'linux' > /dev/null; then
 	# Unfortunately, OSX doesn't provide a ps version that uses size
 	__eg_pssize()
 	{
