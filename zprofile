@@ -1,5 +1,7 @@
+#!/bin/zsh
+
 # Do ZSH specific things here
 
-[ -f ~/.cprofile ] && source ~/.cprofile # load common profile settings
+[ -f "${HOME}/.cprofile" ] && . "${HOME}/.cprofile" # load common profile settings
 
-# vim: ft=zsh
+# vim: filetype=zsh
