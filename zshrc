@@ -31,13 +31,20 @@ fi
 # enable oh-my-zsh
 [ -z "$EG_OH_MY_ZSH" ] && EG_OH_MY_ZSH=1
 
-# oh-my-zsh plugins to load, small default set
-[ -z "$EG_OH_MY_ZSH_PLUGINS" ] && EG_OH_MY_ZSH_PLUGINS=(
-	command-not-found
-	git
-	git-flow-avh
-	sudo
-)
+# oh-my-zsh plugins to load, small default set then autodetect
+if [ -z "$EG_OH_MY_ZSH_PLUGINS" ]; then
+	EG_OH_MY_ZSH_PLUGINS=(
+		command-not-found
+	)
+
+	if command -v git > /dev/null; then
+		EG_OH_MY_ZSH_PLUGINS="$EG_OH_MY_ZSH_PLUGINS git"
+	fi
+
+	if command -v sudo > /dev/null; then
+		EG_OH_MY_ZSH_PLUGINS="$EG_OH_MY_ZSH_PLUGINS sudo"
+	fi
+fi
 
 # other zsh pluigns
 [ -z "$EG_ZSH_PLUGINS" ] && EG_ZSH_PLUGINS=(
