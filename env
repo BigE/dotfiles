@@ -27,7 +27,7 @@ if [ -n "$OSTYPE" ] && expr "$OSTYPE" : 'darwin' > /dev/null; then
 		export BREW_LOCATION="/opt/homebrew/bin/brew"
 	elif command -v arch > /dev/null && [ "$(arch)" = "i386" ] && [ -d /usr/local/bin/brew ]; then
 		export BREW_LOCATION="/usr/local/bin/brew"
-	elif ! command -v arch && [ -d /usr/local/bin/brew ]; then
+	elif ! command -v arch > /dev/null && [ -d /usr/local/bin/brew ]; then
 		export BREW_LOCATION="/usr/local/bin/brew"
 	fi
 fi
