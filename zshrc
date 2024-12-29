@@ -22,7 +22,7 @@ fi
 # CONFIGURATION
 ###############################################################################
 
-# control ls colors
+# control ls colors from oh-my-zsh
 [ -z "$EG_DISABLE_LS_COLORS" ] && EG_DISABLE_LS_COLORS=1
 
 # enable vi mode
@@ -136,8 +136,24 @@ if ! zgen saved; then
 		if [ -n "$EG_OH_MY_ZSH_OS_DETECT" ] && [ $EG_OH_MY_ZSH_OS_DETECT = 1 ]; then
 			case "$OSTYPE"; in
 				linux*)
-					if type pacman > /dev/null; then
-						zgen oh-my-zsh plugins/archlinux
+					if type systemctl > /dev/null; then
+						zgen oh-my-zsh plugins/systemd
+					fi
+
+					if [ -f /etc/os-release ]; then
+						. /etc/os-release
+
+						case "$ID"; in
+							"arch"*)
+								zgen oh-my-zsh plugins/archlinux
+								;;
+							"debian")
+								zgen oh-my-zsh plugins/debian
+								;;
+							"ubuntu")
+								zgen oh-my-zsh plugins/ubuntu
+								;;
+						esac
 					fi
 				;;
 				darwin*)
