@@ -34,15 +34,15 @@ fi
 # oh-my-zsh plugins to load, small default set then autodetect
 if [ -z "$EG_OH_MY_ZSH_PLUGINS" ]; then
 	EG_OH_MY_ZSH_PLUGINS=(
-		command-not-found
+		'command-not-found'
 	)
 
 	if command -v git > /dev/null; then
-		EG_OH_MY_ZSH_PLUGINS="$EG_OH_MY_ZSH_PLUGINS git"
+		EG_OH_MY_ZSH_PLUGINS+=('git')
 	fi
 
 	if command -v sudo > /dev/null; then
-		EG_OH_MY_ZSH_PLUGINS="$EG_OH_MY_ZSH_PLUGINS sudo"
+		EG_OH_MY_ZSH_PLUGINS+=('sudo')
 	fi
 fi
 
