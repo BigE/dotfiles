@@ -8,7 +8,9 @@
 # OPTIONS
 ###############################################################################
 
-export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen --RAW-CONTROL-CHARS"
+[ -z "$LESS" ] && export LESS="--tabs=4 --no-init --LONG-PROMPT --ignore-case --quit-if-one-screen --RAW-CONTROL-CHARS"
+[ -z "$PAGER" ] && command -v less > /dev/null && export PAGER="less"
+
 
 ###############################################################################
 # ALIASES
@@ -129,6 +131,7 @@ if expr "$OSTYPE" : 'linux' > /dev/null; then
 	alias pssize=__eg_pssize
 fi
 
+
 ###############################################################################
 # LOCALRC
 ###############################################################################
@@ -141,6 +144,7 @@ fi
 
 # If we're zsh, import .zshrc_local
 [ -n "$ZSH_VERSION" ] && [ -f "${HOME}/.zshrc_local" ] && . "${HOME}/.zshrc_local"
+
 
 ###############################################################################
 # PATH
