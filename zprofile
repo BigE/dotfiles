@@ -1,7 +1,15 @@
 #!/bin/zsh
 
-# Do ZSH specific things here
+if [ -d "$HOME"/.shellrc/login.d/ ]; then
+	# first source the common login items
+	for file in "$HOME"/.shellrc/login.d/*.sh; do
+		source "$file"
+	done
 
-[ -f "${HOME}/.cprofile" ] && . "${HOME}/.cprofile" # load common profile settings
+	# now we run ZSH specifics and overrides
+	for file in "$HOME"/.shellrc/login.d/*.zsh; do
+		source "$file"
+	done
+fi
 
 # vim: filetype=zsh
