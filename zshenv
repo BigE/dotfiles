@@ -1,6 +1,9 @@
 #!/bin/zsh
 
 if [ -d "$HOME/.shellrc/env.d" ]; then
+	# disable glob errors in case files don't exist
+	setopt nullglob
+
 	# first source the common env files
 	for file in "$HOME"/.shellrc/env.d/*.sh; do
 		source "$file"
@@ -10,6 +13,9 @@ if [ -d "$HOME/.shellrc/env.d" ]; then
 	for file in "$HOME"/.shellrc/env.d/*.zsh; do
 		source "$file"
 	done
+
+	# back to normal
+	unsetopt nullglob
 fi
 
 # make sure our path is unique
