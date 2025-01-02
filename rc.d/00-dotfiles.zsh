@@ -2,9 +2,6 @@
 
 # My custom zshrc using zgen
 
-# Uncomment this for profiling
-#zmodload zsh/zprof
-
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -204,9 +201,6 @@ fi
 # Theme settings (powerlevel10k) are now in the p10k.zsh file
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [ -f "${HOME}/.p10k.zsh" ] && source "${HOME}/.p10k.zsh"
-
-# Uncomment this for profiling
-#zprof
 
 # We done.
 # vim: filetype=zsh
