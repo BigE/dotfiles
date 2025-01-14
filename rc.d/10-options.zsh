@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 # let oh-my-zsh know we want to do our own thing
 if [ "$EG_DISABLE_LS_COLORS" -eq 1 ]; then
 	DISABLE_LS_COLORS=true
@@ -19,3 +21,5 @@ fi
 for OPTION in "${EG_ZSH_OPTIONS[@]}"; do
 	setopt "${OPTION}"
 done
+
+# vim: filetype=zsh
