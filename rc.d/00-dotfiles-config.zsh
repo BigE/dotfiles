@@ -9,12 +9,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# I iterm2 - disables loading of ~/.tmux.conf - https://github.com/robbyrussell/oh-my-zsh/pull/1903
-ZSH_TMUX_ITERM2=false
-if [ -n "$ITERM_SESSION_ID" ]; then
-	ZSH_TMUX_ITERM2=true
-fi
-
 ###############################################################################
 # CONFIGURATION
 ###############################################################################
