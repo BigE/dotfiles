@@ -6,13 +6,10 @@
 if [ -d "$HOME"/.shellrc/rc.d ]; then
 	setopt nullglob
 
-	# first the common rc items
-	for file in "$HOME"/.shellrc/rc.d/*.sh; do
-		source "$file"
-	done
-
-	# now load the zsh specific rc items
-	for file in "$HOME"/.shellrc/rc.d/*.zsh; do
+	# Loop through all files and import them. Control the order by naming the
+	# files with a ##- prefix. 00 is loaded before 01, etc.
+	files=("$HOME"/.shellrc/rc.d/*.{sh,zsh})
+	for file in "${(n)files[@]}"; do
 		source "$file"
 	done
 
