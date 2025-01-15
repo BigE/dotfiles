@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+
 # My custom zshrc using zgen
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.

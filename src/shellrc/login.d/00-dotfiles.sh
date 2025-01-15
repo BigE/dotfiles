@@ -1,4 +1,6 @@
 #!/bin/sh
+
+
 # Common profile things that can be done between bash/zsh
 
 # Homebrew
