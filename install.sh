@@ -62,7 +62,7 @@ if [ $EG_ENABLE_BASH -eq 1 ]; then
     ln -sf "$SRC_DIR/bashrc" "$HOME/.bashrc"
     ln -sf "$SRC_DIR"/shellrc/env.d/*.bash "$HOME/.shellrc/env.d/"
     #ln -sf "$SRC_DIR"/shellrc/login.d/*.bash "$HOME/.shellrc/login.d/"
-    #ln -sf "$SRC_DIR"/shellrc/rc.d/*.bash "$HOME/.shellrc/rc.d/"
+    ln -sf "$SRC_DIR"/shellrc/rc.d/*.bash "$HOME/.shellrc/rc.d/"
 fi
 
 if [ $EG_ENABLE_ZSH -eq 1 ]; then
@@ -84,7 +84,7 @@ fi
 
 if [ $EG_ENABLE_POWERLINE -eq 1 ]; then
     echo "linking powerline config"
-    ln -sf "$SRC_DIR/config/powerline" "$HOME/.config/powerline"
+    ln -sf "$SRC_DIR/config/powerline" "$HOME/.config/"
 fi
 
 if [ $EG_ENABLE_TMUX -eq 1 ]; then
@@ -101,7 +101,7 @@ if [ $EG_ENABLE_VIM ]; then
         mkdir "$HOME/.vim"
     fi
 
-    ln -sf "$SRC_DIR/vim/colors" "$HOME/.vim/colors"
-    ln -sf "$SRC_DIR/vim/pack" "$HOME/.vim/pack"
+    ln -sf "$SRC_DIR/vim/colors" "$HOME/.vim/"
+    ln -sf "$SRC_DIR/vim/pack" "$HOME/.vim/"
     ln -sf "$SRC_DIR/vimrc" "$HOME/.vimrc"
 fi
