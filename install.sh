@@ -109,7 +109,13 @@ fi
 
 if [ $EG_ENABLE_POWERLINE -eq 1 ]; then
     echo "linking powerline config"
-    ln -sf "$SRC_DIR/config/powerline" "$HOME/.config/"
+    if [ ! -d "$HOME"/.config/powerline/themes/tmux/ ]; then
+        echo "creating powerline folders"
+        mkdir -p "$HOME"/.config/powerline/themes/tmux/
+    fi
+
+    ln -sf "$SRC_DIR"/config/powerline/config.json "$HOME"/.config/powerline/config.json
+    ln -sf "$SRC_DIR"/config/powerline/themes/tmux/*.json "$HOME"/.config/powerline/themes/tmux/
 fi
 
 if [ $EG_ENABLE_TMUX -eq 1 ]; then
