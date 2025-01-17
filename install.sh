@@ -1,9 +1,29 @@
 #!/bin/sh
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
+# Yes, I am slef, not self
+SLEF=$(basename "$0")
+USAGE="
+$SLEF [-h|--help] [--disable-bash] [--disable-git] [--disable-powerline]
+$(printf %${#SLEF}s '') [--disable-tmux] [--disable-zsh]
+
+Simple installer script for my dotfiles. By default all options are enabled and
+linked unless they are explicitly disabled. Please view the README.md or view
+the project at https://github.com/BigE/dotfiles for more details.
+
+    -h|--help           Display this message and exit
+    --disable-bash      Disable linking of bash specific scripts
+    --disable-git       Disable linking of git configuration files
+    --disable-powerline Disable linking of the powerline config
+    --disable-tmux      Disable linking of the tmux config
+    --disable-zsh       Disable linking of zsh specific scripts
+"
+
 if [ "$PWD" != "$DIR" ]
 then
-    echo "ERROR: Script must be run from its parent directory"
+    echo "ERROR: Script must be run from same directory, use cd command below"
+    echo "cd $DIR"
+    echo "$USAGE"
     exit 1;
 fi
 
@@ -19,24 +39,29 @@ EG_ENABLE_ZSH=1
 
 for arg in "$@"; do
     case "$arg" in
-        "-h|--help")
-            echo "Installer for my dotfiles"
+        -h|--help)
+            echo "$USAGE"
             exit 0;
         ;;
-        "--disable-bash")
+        --disable-bash)
             EG_ENABLE_BASH=0
         ;;
-        "--disable-git")
+        --disable-git)
             EG_ENABLE_GIT=0
         ;;
-        "--disable-powerline")
+        --disable-powerline)
             EG_ENABLE_POWERLINE=0
         ;;
-        "--disable-tmux")
+        --disable-tmux)
             EG_ENABLE_TMUX=0
         ;;
-        "--disable-zsh")
+        --disable-zsh)
             EG_ENABLE_ZSH=0
+        ;;
+        *)
+            echo "ERROR: unknown argument $arg"
+            echo "$USAGE"
+            exit 1
         ;;
     esac
 done
