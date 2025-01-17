@@ -1,0 +1,23 @@
+#!/bin/bash
+
+
+# This is a bashrc, if we're not interactive, gtfo!
+if [[ $- != *i* ]]; then
+	return
+fi
+
+shopt -s nullglob
+
+if [ -z "$EG_BASH_ENV_D" ] && [ -d "$HOME/.shellrc/env.d" ]; then
+	for file in "$HOME"/.shellrc/env.d/*.{sh,bash}; do
+		source "$file"
+	done
+fi
+
+for file in "$HOME"/.shellrc/rc.d/*.{sh,bash}; do
+	source "$file"
+done
+
+shopt -u nullglob
+
+# vim: ft=bash

@@ -1,25 +1,26 @@
 #!/bin/sh
 
+
 # Set generic environment variables here
 
 # language
 [ -z "$LC_ALL" ] && export LC_ALL="$LANG"
 
 # EDITOR
-if command -v vim > /dev/null; then
+if [ -z "$EDITOR" ] && command -v vim > /dev/null; then
 	EDITOR="$(which vim)"
 	export EDITOR
 fi
 
 # default history memory size
-export HISTSIZE=10000
+[ -z "$HISTSIZE" ] && export HISTSIZE=10000
 
 # pyenv
-export PYENV_ROOT="${HOME}/.pyenv"
+[ -z "$PYENV_ROOT" ] && export PYENV_ROOT="${HOME}/.pyenv"
 
 # virtualenv
-export PROJECT_HOME="${HOME}/Projects"
-export WORKON_HOME="${HOME}/.virtualenv"
+[ -z "$PROJECT_HOME" ] && export PROJECT_HOME="${HOME}/Projects"
+[ -z "$PROJECT_HOME" ] && export WORKON_HOME="${HOME}/.virtualenv"
 
 # homebrew
 if [ -n "$OSTYPE" ] && expr "$OSTYPE" : 'darwin' > /dev/null; then
@@ -31,8 +32,5 @@ if [ -n "$OSTYPE" ] && expr "$OSTYPE" : 'darwin' > /dev/null; then
 		export BREW_LOCATION="/usr/local/bin/brew"
 	fi
 fi
-
-# Finally, allow everything here to be overridden
-[ -f "${HOME}/.env.local" ] && . "${HOME}/.env.local"
 
 # vim: filetype=sh

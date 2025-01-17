@@ -1,0 +1,24 @@
+#!/bin/bash
+
+
+shopt -s nullglob
+
+# env.d
+if [ -d "$HOME/.shellrc/env.d" ]; then
+	for file in "$HOME"/.shellrc/env.d/*.{sh,bash}; do
+		source "$file"
+	done
+fi
+
+if [ -d "$HOME/.shellrc/login.d" ]; then
+	for file in "$HOME"/.shellrc/login.d/*.{sh,bash}; do
+		source "$file"
+	done
+fi
+
+shopt -u nullglob
+
+# Do the interactive part last to keep things similar between zsh/bash
+[ -f "$HOME/.bashrc" ] && source "$HOME/.bashrc"
+
+# vim: ft=bash
