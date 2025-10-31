@@ -1,0 +1,6 @@
+{
+    "groups": {
+        "arch_updates":       { "fg": "brightorange", "bg": "gray2", "attrs": [] },
+        "arch_updates_count": { "fg": "brightorange", "bg": "gray2", "attrs": ["bold"] }
+    }
+}

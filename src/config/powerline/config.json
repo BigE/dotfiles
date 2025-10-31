@@ -1,4 +1,9 @@
 {
+	"common": {
+		"paths": [
+			"~/.config/powerline/segments"
+		]
+	},
 	"ext": {
 		"tmux": {
 			"theme": "default"

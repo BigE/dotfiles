@@ -109,13 +109,25 @@ fi
 
 if [ $EG_ENABLE_POWERLINE -eq 1 ]; then
     echo "linking powerline config"
+    if [ ! -d "$HOME"/.config/powerline/colorschemes/tmux/ ]; then
+        echo "creating powerline colorschemes folder"
+        mkdir -p "$HOME"/.config/powerline/colorschemes/tmux/
+    fi
+
     if [ ! -d "$HOME"/.config/powerline/themes/tmux/ ]; then
-        echo "creating powerline folders"
+        echo "creating powerline theme folder"
         mkdir -p "$HOME"/.config/powerline/themes/tmux/
     fi
 
+    if [ ! -d "$HOME"/.config/powerline/segments/ ]; then
+        echo "creating powerline segments folder"
+        mkdir -p "$HOME"/.config/powerline/segments/
+    fi
+
     ln -sf "$SRC_DIR"/config/powerline/config.json "$HOME"/.config/powerline/config.json
+    ln -sf "$SRC_DIR"/config/powerline/colorschemes/tmux/*.json "$HOME"/.config/powerline/colorschemes/tmux/
     ln -sf "$SRC_DIR"/config/powerline/themes/tmux/*.json "$HOME"/.config/powerline/themes/tmux/
+    ln -sf "$SRC_DIR"/config/powerline/segments/custom_arch_updates.py "$HOME"/.config/powerline/segments/
 fi
 
 if [ $EG_ENABLE_TMUX -eq 1 ]; then
