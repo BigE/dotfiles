@@ -21,9 +21,14 @@ safe_env['LANG'] = 'C'
 safe_env['LC_ALL'] = 'C'
 
 class ArchUpdatesSegment(ThreadedSegment):
+    checkupdates_command: str
     # How often to re-run 'checkupdates' (in seconds).
     # 1800s = 30 minutes.
-    interval = 1800
+    interval: int = 1800
+
+    def set_state(self, checkupdates_command='checkupdates', **kwargs):
+        self.checkupdates_command = checkupdates_command
+        super(ArchUpdatesSegment, self).set_state(**kwargs)
 
     def update(self, *args, **kwargs):
         """
@@ -37,7 +42,7 @@ class ArchUpdatesSegment(ThreadedSegment):
             # - check=False: We will manually check the return code
             # - env=safe_env: Prevents locale errors
             result = subprocess.run(
-                ['checkupdates'],
+                [self.checkupdates_command],
                 capture_output=True,
                 text=True,
                 check=False,
